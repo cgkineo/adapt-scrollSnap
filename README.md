@@ -7,11 +7,11 @@ Please see this [**blog post**](https://cityandguilds.sharepoint.com/teamsite/ki
 
 ## Settings Overview
 
-**scrollSnap** is configured in *config.json* with the attributes that follow. The attributes are properly formatted as JSON in [*example.json*](https://github.com/cgkineo/adapt-scrollSnap/blob/master/example.json).
+**scrollSnap** is configured in *course.json* with the attributes that follow. The attributes are properly formatted as JSON in [*example.json*](https://github.com/cgkineo/adapt-scrollSnap/blob/master/example.json).
 
 ### Attributes
 
-The following attributes are set within *config.json*.  
+The following attributes are set within *course.json*.  
 
 **_scrollSnap** (object): The scrollSnap object that contains the configuration settings.
 
