@@ -1,0 +1,17 @@
+html.scrollSnap {
+	@media all and (min-width: @device-width-medium) {
+		&.location-page {
+			overflow-y: hidden !important;
+
+			#wrapper {
+				overflow-x: inherit !important;
+			}
+		}
+	}
+
+	.page {
+		.page-header {
+			display: none;
+		}
+	}
+}

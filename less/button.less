@@ -1,0 +1,28 @@
+@media all and (min-width: @device-width-medium) {
+	.scrollSnap-button {
+		position: fixed;
+		left: 0;
+    	right: 0;
+    	bottom: 0;
+    	margin: auto;
+    	max-width: @max-width;
+		
+		display: block;
+		z-index: 499;
+
+		&.show {
+			opacity: 1;
+			transition: opacity 0.4s;
+		}
+
+		&.hide {
+			opacity: 0;
+		}
+	}
+}
+
+@media all and (max-width: @device-width-medium) {
+	.scrollSnap-button {
+		display: none;
+	}
+}
