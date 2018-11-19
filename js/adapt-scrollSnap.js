@@ -4,21 +4,21 @@ define([
   'libraries/hammer.min'
 ], function(Adapt, ButtonView) {
 
-	var ScrollSnap = Backbone.Controller.extend({
+    var ScrollSnap = Backbone.Controller.extend({
 
         _config: null,
         _buttonView: null,
-		_locationId: null,
-		_blockModels: [],
-		_currentModel: null,
+        _locationId: null,
+        _blockModels: [],
+        _currentModel: null,
         _blockViews: [],
         _isInternalNavigation: null,
         _hammer: null,
         _isShiftKeyPressed: false,
 
-		initialize: function() {
+        initialize: function() {
             this.listenToOnce(Adapt, 'adapt:start', this.onAdaptStart);
-	    },
+        },
 
         _disableTabindexes: function() {
             // prevent default tabbing as this interferes with scrolling
@@ -41,12 +41,12 @@ define([
 
         addHtmlClass: function() {
             var $html = $('html');
-            
+
             $html.addClass('scrollSnap');
             if (this._config._useNavigationOffset === false) $html.addClass('no-navigation-offset');
         },
 
-	    addScrollEvents: function() {
+        addScrollEvents: function() {
             if (Adapt.device.screenSize === "large") {
                 this._onWheel = _.bind(this.onWheel, this);
                 this._onKeyDown = _.bind(this.onKeyDown, this);
@@ -68,17 +68,17 @@ define([
 
                 window.addEventListener('scroll', this._onScroll);
             }
-	    },
+        },
 
-	    removeScrollEvents: function() {
+        removeScrollEvents: function() {
             window.removeEventListener('touchmove', this.onTouchMove);
             window.removeEventListener('scroll', this._onScroll);
-			window.removeEventListener('wheel', this._onWheel);
+            window.removeEventListener('wheel', this._onWheel);
             window.removeEventListener('keydown', this._onKeyDown);
             window.removeEventListener('keyup', this._onKeyUp);
 
             if (this._hammer) this._hammer.destroy();
-	    },
+        },
 
         initButton: function() {
             var config = this._config._button;
@@ -110,8 +110,8 @@ define([
             return index === (this._blockModels.length - 1);
         },
 
-		scrollToId: function(id, duration) {
-			this.disable();
+        scrollToId: function(id, duration) {
+            this.disable();
 
             this._isInternalNavigation = true;
 
@@ -125,7 +125,7 @@ define([
             }
 
             Adapt.scrollTo('.' + id, settings);
-		},
+        },
 
         setLocationId: function() {
             var highestOnscreen = 0;
@@ -172,13 +172,13 @@ define([
             this.scrollToId(this._locationId);
         },
 
-	    onAdaptStart: function() {
-	    	this._config = Adapt.course.get('_scrollSnap');
+        onAdaptStart: function() {
+            this._config = Adapt.course.get('_scrollSnap');
 
-	    	if (this._config && this._config._isEnabled) {
+            if (this._config && this._config._isEnabled) {
                 this.addHtmlClass();
 
-	    		this.listenTo(Adapt, {
+                this.listenTo(Adapt, {
                     'pageView:preRender': this.onPagePreRender,
                     'pageView:ready': this.onPageReady,
                     'page:scrolledTo': this.onPageScrolledTo,
@@ -188,12 +188,12 @@ define([
         },
 
         onPagePreRender: function(view) {
-        	this._blockModels = view.model.findDescendantModels('blocks');
+            this._blockModels = view.model.findDescendantModels('blocks');
 
-        	var locationId = Adapt.location._currentId;
-        	var model = Adapt.findById(locationId);
+            var locationId = Adapt.location._currentId;
+            var model = Adapt.findById(locationId);
 
-        	if (model.get('_type') !== "block") model = this._blockModels[0];
+            if (model.get('_type') !== "block") model = this._blockModels[0];
 
             this.setCurrentModel(model);
 
@@ -226,7 +226,7 @@ define([
         },
 
         onRouterLocation: function() {
-        	this._blockModels = this._blockViews = [];
+            this._blockModels = this._blockViews = [];
 
             this.disable();
 
@@ -245,11 +245,11 @@ define([
         },
 
         onWheel: function(event) {
-        	if (event.deltaY > 0) {
-	            this.snapDown();
-	        } else {
-	            this.snapUp();
-	        }
+            if (event.deltaY > 0) {
+                this.snapDown();
+            } else {
+                this.snapUp();
+            }
         },
 
         onKeyDown: function(event) {
@@ -277,11 +277,11 @@ define([
         },
 
         onSwipeUp: function(event) {
-        	this.snapDown();
+            this.snapDown();
         },
 
         onSwipeDown: function(event) {
-        	this.snapUp();
+            this.snapUp();
         },
 
         onButtonClick: function() {
@@ -292,8 +292,8 @@ define([
             this.scrollToId(this._locationId, 0);
         }
 
-	});
+    });
 
-	new ScrollSnap();
+    new ScrollSnap();
 
 });
