@@ -1,5 +1,5 @@
 # adapt-scrollSnap
-An extension which hides the scrollbar and snaps to blocks for large devices. Navigation based on swipe gestures, specific keyboard navigation, the mouse wheel, and an optional scroll button.
+An extension which hides the scrollbar and snaps the scroll position to blocks for large devices. Navigation based on swipe gestures, specific keyboard navigation, the mouse wheel, and an optional scroll button.
 
 Content is set to fill the viewport height.
 
@@ -7,17 +7,17 @@ Please see this [**blog post**](https://cityandguilds.sharepoint.com/teamsite/ki
 
 ## Settings Overview
 
-**scrollSnap** is configured in *course.json* with the attributes that follow. The attributes are properly formatted as JSON in [*example.json*](https://github.com/cgkineo/adapt-scrollSnap/blob/master/example.json).
+**scrollSnap** is configured in *course.json*. The attributes are properly formatted as JSON in [*example.json*](https://github.com/cgkineo/adapt-scrollSnap/blob/master/example.json).
 
 ### Attributes
 
-The following attributes are set within *course.json*.  
+The following attributes are set within *course.json*:
 
 **_scrollSnap** (object): The scrollSnap object that contains the configuration settings.
 
 >**_isEnabled** (boolean): Turns the extension on/off. Acceptable values are `true` and `false`.
 
->**_useNavigationOffset** (boolean): Determines whether to use the navigation height to offset the content and scroll positions. Acceptable values are `true` and `false`. Set to `true` to fill the entire viewport height.
+>**_useNavigationOffset** (boolean): Determines whether to use the navigation height to offset the content and scroll positions. Acceptable values are `true` and `false`. Set to `false` to fill the entire viewport height.
 
 >**_scrollDuration** (number): The duration of the scroll transition.
 
@@ -35,4 +35,4 @@ The following attributes are set within *course.json*.
 
 - Currently not setup to work with [**adapt-contrib-trickle**](https://github.com/adaptlearning/adapt-contrib-trickle).
 
-- [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-) won't currently snap, but insteads scrolls the associated component into view.
+- [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-) won't currently snap in the same way, instead scrolling the associated component into view.
