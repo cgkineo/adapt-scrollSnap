@@ -1,28 +1,29 @@
-@media all and (min-width: @device-width-medium) {
-	.scrollSnap-button {
-		position: fixed;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		margin: auto;
-		max-width: @max-width;
-		
-		display: block;
-		z-index: 499;
+.scrollsnap {
+  @media (min-width: @device-width-medium) {
+    display: block;
+  }
 
-		&.show {
-			opacity: 1;
-			transition: opacity 0.4s;
-		}
+  @media (max-width: @device-width-medium) {
+    display: none;
+  }
 
-		&.hide {
-			opacity: 0;
-		}
-	}
-}
+  left: 0;
+  // right: 0;
+  bottom: 0;
+  margin: auto 0;
+  max-width: @max-width;
+  width: 100%;
 
-@media all and (max-width: @device-width-medium) {
-	.scrollSnap-button {
-		display: none;
-	}
+  display: block;
+  z-index: 70;
+
+  &.is-visible {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+
+  &.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 }

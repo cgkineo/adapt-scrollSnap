@@ -1,63 +1,63 @@
 html.scrollSnap {
-	.full-vh {
-		height: 100vh !important;
-	}
+  .full-vh {
+    height: 100vh !important;
+  }
 
-	.maxWidth {
-		max-width: 100% !important;
-	}
+  .maxWidth {
+    max-width: 100% !important;
+  }
 
-	@media all and (min-width: @device-width-medium) {
-		&.no-navigation-offset {
-			#wrapper {
-				padding-top: 0px !important;
-			}
+  @media all and (min-width: @device-width-medium) {
+    &.no-navigation-offset {
+      #wrapper {
+        padding-top: 0px !important;
+      }
 
-			.navigation {
-				background-color: transparent !important;
-				box-shadow: none !important;
-			}
-		}
+      .nav {
+        background-color: transparent !important;
+        box-shadow: none !important;
+      }
+    }
 
-		#wrapper {
-			//.maxWidth;
-		}
+    // #wrapper {
+      //.maxWidth;
+    // }
 
-		.navigation {
-			//.maxWidth;
-		}
+    // .nav {
+      //.maxWidth;
+    // }
 
-		.article-inner {
-			padding-top: 0px !important;
-			padding-bottom: 0px !important;
-		}
+    .article__inner {
+      padding-top: 0px !important;
+      padding-bottom: 0px !important;
+    }
 
-		.block-inner {
-			//.maxWidth;
-			padding-top: 0px !important;
-			padding-bottom: 0px !important;
-		}
+    .block__inner {
+      //.maxWidth;
+      padding-top: 0px !important;
+      padding-bottom: 0px !important;
+    }
 
-		.component:not(.no-full-vh) {
-			.full-vh;
+    .component__container:not(.no-full-vh) {
+      .full-vh;
 
-			.component-inner {
-				position: relative !important;
-				top: 50% !important;
-				transform: translateY(-50%) !important;
-			}
-		}
+      // .component__inner {
+      //   position: relative !important;
+      //   top: 50% !important;
+      //   transform: translateY(-50%) !important;
+      // }
+    }
 
-		.has-background-image {
-			background-size: cover;
-			background-repeat: no-repeat;
-			background-position: center center;
-		}
-	}
+    .has-background-image {
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+  }
 
-	@media (max-width: @device-width-medium) {
-		.block-inner {
-			//.maxWidth;
-		}
-	}
+  @media (max-width: @device-width-medium) {
+    // .block__inner {
+      //.maxWidth;
+    // }
+  }
 }

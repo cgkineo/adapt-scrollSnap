@@ -3,8 +3,10 @@
     "_isEnabled": true,
     "_useNavigationOffset": false,
     "_scrollDuration": 400,
-    "_button": {
-        "_isEnabled": true,
-        "label": "Scroll down to continue"
+    "_nextButton": {
+      "label": "Scroll down to continue"
+    },
+    "_lastButton": {
+      "label": "Scroll to top"
     }
-}
+  }

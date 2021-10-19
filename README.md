@@ -33,6 +33,6 @@ The following attributes are set within *course.json*:
 
 - Not designed to work with a page-header. As the extension fills the viewport, all content should be added as components.
 
-- Currently not setup to work with [**adapt-contrib-trickle**](https://github.com/adaptlearning/adapt-contrib-trickle).
+- Currently not setup to work with [**adapt-contrib-trickle**](https://github.com/adaptlearning/adapt-contrib-trickle). Instead, blocks are step-locked until completed. Mark blocks as _isOptional to disable step-locking.
 
-- [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-) won't currently snap in the same way, instead scrolling the associated component into view.
+- Currently not setup to work with [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-). Do not use with other plugins that permit navigation (e.g. adapt-devtools map), including use of `Adapt.navigateToElement`.
