@@ -132,8 +132,8 @@ class ScrollSnap extends Backbone.Controller {
   }
 
   snapToLimit() {
-    let index = this.stepLockIndex;
-    if (index < 0) index = this.lastModelIndex;
+    let index = Models.stepLockIndex;
+    if (index < 0) index = Models.lastModelIndex;
     this.snapToBlockIndex(index);
   }
 

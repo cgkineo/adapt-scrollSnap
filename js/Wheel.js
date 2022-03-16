@@ -77,7 +77,6 @@ export default class ScrollSnap extends Backbone.Controller {
     const blockHeight = currentBlockView.$el.height();
     const windowHeight = $(window).height();
     if (blockHeight > windowHeight) {
-      /** @type {HTMLElement} */
       const measure = currentBlockView.$el.onscreen();
       if (event.deltaY < 0 && parseInt(measure.bottom) < 0) {
         $('html')[0].scrollTop -= _.max([-40, measure.bottom]);
