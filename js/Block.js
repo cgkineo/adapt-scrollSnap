@@ -49,12 +49,10 @@ export default class Block extends Backbone.Controller {
 
   onBlockInteractionComplete(model) {
     if (!Config.isScrollSnapSize || !model.get('_isInteractionComplete')) return;
-
     if (Adapt.notify.stack.length > 0) {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onBlockInteractionComplete(model));
       return;
     }
-
     // defer as next child hasn't always been added by the time this triggers
     _.defer(() => this.controller.snapDown());
   }
@@ -64,9 +62,7 @@ export default class Block extends Backbone.Controller {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onChildComplete(e));
       return;
     }
-
     Models.updateLocking();
-
     // defer as next child hasn't always been added by the time this triggers
     _.defer(async() => {
       const model = e.target;

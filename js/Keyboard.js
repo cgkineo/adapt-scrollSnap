@@ -15,7 +15,6 @@ export default class Keyboard extends Backbone.Controller {
 
   onKeyDown(event) {
     const key = event.key || event.code || event.keyCode;
-
     // disable arrow keys to avoid conflict with screen readers
     switch (key) {
       // case 'ArrowUp':

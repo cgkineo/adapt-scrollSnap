@@ -41,30 +41,25 @@ export default class ScrollSnap extends Backbone.Controller {
 
   wheeled(event) {
     const dir = event.deltaY < 0 ? 1 : -1;
-
     if (this.direction !== dir) {
       this.level = 0;
       this.direction = dir;
       this.tween?.stop();
     }
-
     let isStart = true;
     if (this.wheelChainTimeout) {
       clearTimeout(this.wheelChainTimeout);
       this.wheelChainTimeout = null;
       isStart = false;
     }
-
     this.wheelChainTimeout = setTimeout(this.wheelEnd.bind(this), this.wheelChainInterval);
     const wheelEvent = (new WheelEvent()).initFromEvent(event);
     wheelEvent.flip();
     wheelEvent.isStart = isStart;
-
     if (wheelEvent.isStart) {
       this.canSnap = false;
       this.tween?.stop();
     }
-
     this.consumeScroll(wheelEvent);
   }
 
@@ -77,7 +72,6 @@ export default class ScrollSnap extends Backbone.Controller {
 
   consumeScroll(event) {
     this.level += event.deltaY * this.direction;
-
     // check to see if section can be scrolled further here
     const currentBlockView = Views.currentBlockView;
     const blockHeight = currentBlockView.$el.height();
@@ -96,7 +90,6 @@ export default class ScrollSnap extends Backbone.Controller {
         return;
       }
     }
-
     if (this.level >= this.maxLevel) {
       // the user has moved the mouse wheel sufficiently to gesture snapping up/down
       this.easeLevel(250); // TODO: check if this needs to have non-zero duration
@@ -111,7 +104,6 @@ export default class ScrollSnap extends Backbone.Controller {
 
   easeLevel(duration) {
     if (this.tween) this.tween.stop();
-
     this.tween = new TWEEN.Tween({ level: this.level })
       .to({ level: 0 }, duration)
       .easing(TWEEN.Easing.Quadratic.Out)

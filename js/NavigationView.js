@@ -26,7 +26,6 @@ export default class NavigationView extends Backbone.View {
     const props = {
       ...this.model.toJSON()
     };
-
     ReactDOM.render(<Navigation { ...props } />, this.el);
   }
 

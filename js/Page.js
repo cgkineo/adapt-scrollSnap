@@ -68,18 +68,15 @@ export default class Page extends Backbone.Controller {
     const options = { pluginName: 'scrollSnap' };
     // prevent scrolling without navigation offset and control via plugin
     Adapt.set('_canScroll', false, options);
-
     _.defer(() => {
       Adapt.set('_canScroll', true, options);
       let id = selector.replace('.', '');
       let model = Adapt.findById(id);
       if (!model) return;
-
       if (Models.isComponent(model)) {
         model = model.getParent();
         id = model.get('_id');
       }
-
       if (!Models.isBlock(model)) return;
       Models.setCurrentModel(model);
       this.controller.scrollToId(id);

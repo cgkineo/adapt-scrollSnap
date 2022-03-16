@@ -38,7 +38,6 @@ export default class Navigation extends Backbone.Controller {
       _isFirst: Models.getIsFirstModelIndex(blockIndex),
       _isLast: Models.getIsLastModelIndex(blockIndex)
     });
-
     return data;
   }
 
