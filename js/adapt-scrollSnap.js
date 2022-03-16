@@ -39,6 +39,7 @@ class ScrollSnap extends Backbone.Controller {
   onAdaptStart() {
     if (!Config.isEnabled) return;
     this.page.addEvents();
+    this.device.addEvents();
   }
 
   addEvents() {
@@ -50,7 +51,6 @@ class ScrollSnap extends Backbone.Controller {
     this.wheel.addEvents();
     this.keyboard.addEvents();
     this.touch.addEvents();
-    this.device.addEvents();
     this.focus.addEvents();
     this.block.addEvents();
     if (Config.isSwipeEnabled) this.swipe.addEvents();
@@ -62,7 +62,6 @@ class ScrollSnap extends Backbone.Controller {
     this.keyboard.removeEvents();
     this.touch.removeEvents();
     this.scroll.removeEvents();
-    this.device.removeEvents();
     this.focus.removeEvents();
     this.block.removeEvents();
   }

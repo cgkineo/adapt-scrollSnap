@@ -3,6 +3,7 @@ import Classes from './Classes';
 import Config from './Config';
 import Navigation from './Navigation';
 import State from './State';
+import Views from './Views';
 
 export default class Device extends Backbone.Controller {
 
@@ -46,7 +47,8 @@ export default class Device extends Backbone.Controller {
   onDeviceChanged(screenSize) {
     Classes.updateHtmlClasses();
     Navigation.update();
-    if (!Config.isScrollSnapSize) State.setLocationId();
+    if (!Config.isScrollSnapSize) Views.setLocationId();
+    this.controller.addEvents();
     this.onDeviceResize(screenSize);
   }
 
