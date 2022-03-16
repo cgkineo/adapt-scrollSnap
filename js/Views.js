@@ -44,7 +44,7 @@ export default class Views {
     });
     const model = Models.blockModels.find(model => model.get('_id') === highestId);
     if (!model) return;
-    Models.setCurrentModel(model);
+    State.setCurrentModel(model);
     State.locationId = highestId;
   }
 

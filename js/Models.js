@@ -60,13 +60,6 @@ export default class Models {
     return this.blockModels.indexOf(State.previousModel);
   }
 
-  static setCurrentModel(model) {
-    if (!model || State.currentModel === model) return;
-    if (State.currentModel) State.previousModel = State.currentModel;
-    State.currentModel = model;
-    Adapt.trigger('scrollsnap:change:selected');
-  }
-
   static getDirectionType() {
     const previousIndex = this.getPreviousModelIndex();
     const currentIndex = this.getCurrentModelIndex();

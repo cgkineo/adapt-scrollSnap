@@ -1,3 +1,5 @@
+import Adapt from 'core/js/adapt';
+
 export default class State {
 
   static get currentModel() {
@@ -22,6 +24,13 @@ export default class State {
 
   static set locationId(value) {
     this._locationId = value;
+  }
+
+  static setCurrentModel(model) {
+    if (!model || this.currentModel === model) return;
+    if (this.currentModel) this.previousModel = this.currentModel;
+    this.currentModel = model;
+    Adapt.trigger('scrollsnap:change:selected');
   }
 
 }

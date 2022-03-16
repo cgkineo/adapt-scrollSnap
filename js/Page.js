@@ -38,7 +38,7 @@ export default class Page extends Backbone.Controller {
     Models.updateLocking();
     let model = Adapt.findById(Adapt.location._currentId);
     if (!Models.isBlock(model)) model = Models.blockModels[0];
-    Models.setCurrentModel(model);
+    State.setCurrentModel(model);
   }
 
   onPagePostRender(view) {
@@ -78,7 +78,7 @@ export default class Page extends Backbone.Controller {
         id = model.get('_id');
       }
       if (!Models.isBlock(model)) return;
-      Models.setCurrentModel(model);
+      State.setCurrentModel(model);
       this.controller.scrollToId(id);
     });
   }

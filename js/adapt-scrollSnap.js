@@ -139,7 +139,7 @@ class ScrollSnap extends Backbone.Controller {
 
   snapToBlockIndex(index) {
     if (!this.canSnap) return;
-    Models.setCurrentModel(Models.blockModels[index]);
+    State.setCurrentModel(Models.blockModels[index]);
     this.scrollToId(State.currentModel.get('_id'));
   }
 

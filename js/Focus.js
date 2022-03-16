@@ -22,7 +22,7 @@ export default class Focus extends Backbone.Controller {
     if (!blockId) return;
     const model = Models.blockModels.find(block => block.get('_id') === blockId);
     if (State.currentModel === model) return;
-    Models.setCurrentModel(model);
+    State.setCurrentModel(model);
     this.controller.scrollToId(blockId);
   }
 
