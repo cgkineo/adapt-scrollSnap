@@ -11,7 +11,7 @@ export default class Config extends Backbone.Controller {
   }
 
   static get isScrollSnapSize() {
-    return true;// Adapt.device.screenSize === 'large';
+    return Adapt.device.screenSize === 'large';
   }
 
   static get isSwipeEnabled() {
