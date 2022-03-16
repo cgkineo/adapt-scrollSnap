@@ -1,17 +1,25 @@
 html.scrollSnap {
   @media all and (min-width: @device-width-medium) {
     &.location-page {
+      overflow-x: hidden !important;
       overflow-y: hidden !important;
+    }
 
+    &.no-navigation-offset {
       #wrapper {
-        overflow-x: inherit !important;
+        padding-top: 0 !important;
+      }
+
+      .nav {
+        background-color: transparent !important;
+        box-shadow: none !important;
       }
     }
   }
 
   .page {
-    .page__header {
-      display: none;
+    &__header {
+      .u-display-none;
     }
   }
 }

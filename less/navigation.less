@@ -1,0 +1,33 @@
+.scrollsnap__nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 81;
+  pointer-events: none;
+
+  @media (max-width: @device-width-medium) {
+    .u-display-none;
+  }
+
+  &-btn-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  &-btn {
+    pointer-events: auto;
+  }
+
+  opacity: 1;
+  transition: opacity 0.4s ease;
+
+  &.is-hidden,
+  .is-hidden,
+  .hide-if-locked.is-locked {
+    .u-visibility-hidden;
+    //content-visibility: hidden;
+    pointer-events: none;
+  }
+}
