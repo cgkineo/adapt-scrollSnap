@@ -3,22 +3,19 @@ import WheelEvent from './WheelEvent';
 import Views from './Views';
 import 'libraries/hammer.min';
 
-export default class ScrollSnap extends Backbone.Controller {
+export default class Wheel extends Backbone.Controller {
 
   initialize({ controller }) {
-    _.bindAll(this, 'onWheel', 'animate');
-    this.controller = controller;
-    this.canSnap = false;
-    this.direction = -1;
-    this.level = 0;
-    this.maxLevel = 200;
-    this.wheelChainInterval = 200;
-    requestAnimationFrame(this.animate);
-  }
-
-  animate(time) {
-    requestAnimationFrame(this.animate);
-    TWEEN.update(time);
+    _.bindAll(this, 'onWheel', '_animate');
+    this._controller = controller;
+    this._canSnap = false;
+    this._direction = -1;
+    this._level = 0;
+    this._maxLevel = 200;
+    this._isWaitingForWheelEnd = false;
+    this._wheelChainInterval = 200;
+    this._wheelChainTimeout = null;
+    requestAnimationFrame(this._animate);
   }
 
   addEvents() {
@@ -29,49 +26,44 @@ export default class ScrollSnap extends Backbone.Controller {
     window.removeEventListener('wheel', this.onWheel);
   }
 
-  onWheel(event) {
-    this.wheeled(event);
-    _.defer(() => {
-      if (!this.canSnap || this.controller.isAnimating) return;
-      this.canSnap = false;
-      if (event.deltaY > 0) return this.controller.snapDown();
-      this.controller.snapUp();
-    });
+  _animate(time) {
+    requestAnimationFrame(this._animate);
+    TWEEN.update(time);
   }
 
-  wheeled(event) {
+  _wheeled(event) {
     const dir = event.deltaY < 0 ? 1 : -1;
-    if (this.direction !== dir) {
-      this.level = 0;
-      this.direction = dir;
-      this.tween?.stop();
+    if (this._direction !== dir) {
+      this._level = 0;
+      this._direction = dir;
+      this._tween?.stop();
     }
     let isStart = true;
-    if (this.wheelChainTimeout) {
-      clearTimeout(this.wheelChainTimeout);
-      this.wheelChainTimeout = null;
+    if (this._wheelChainTimeout) {
+      clearTimeout(this._wheelChainTimeout);
+      this._wheelChainTimeout = null;
       isStart = false;
     }
-    this.wheelChainTimeout = setTimeout(this.wheelEnd.bind(this), this.wheelChainInterval);
+    this._wheelChainTimeout = setTimeout(this._wheelEnd.bind(this), this._wheelChainInterval);
     const wheelEvent = (new WheelEvent()).initFromEvent(event);
     wheelEvent.flip();
     wheelEvent.isStart = isStart;
     if (wheelEvent.isStart) {
-      this.canSnap = false;
-      this.tween?.stop();
+      this._canSnap = false;
+      this._tween?.stop();
     }
-    this.consumeScroll(wheelEvent);
+    this._consumeScroll(wheelEvent);
   }
 
-  wheelEnd() {
-    this.wheelChainTimeout = null;
+  _wheelEnd() {
+    this._wheelChainTimeout = null;
     const wheelEvent = new WheelEvent(0, 0, 0, false, true);
-    this.isWaitingForWheelEnd = false;
-    this.consumeScroll(wheelEvent);
+    this._isWaitingForWheelEnd = false;
+    this._consumeScroll(wheelEvent);
   }
 
-  consumeScroll(event) {
-    this.level += event.deltaY * this.direction;
+  _consumeScroll(event) {
+    this._level += event.deltaY * this._direction;
     // check to see if section can be scrolled further here
     const currentBlockView = Views.currentBlockView;
     const blockHeight = currentBlockView.$el.height();
@@ -89,29 +81,39 @@ export default class ScrollSnap extends Backbone.Controller {
         return;
       }
     }
-    if (this.level >= this.maxLevel) {
+    if (this._level >= this._maxLevel) {
       // the user has moved the mouse wheel sufficiently to gesture snapping up/down
-      this.easeLevel(250); // TODO: check if this needs to have non-zero duration
+      this._easeLevel(250); // TODO: check if this needs to have non-zero duration
       // prevent queued wheel events causing multiple snaps
-      if (!this.isWaitingForWheelEnd) this.canSnap = true;
-      this.isWaitingForWheelEnd = true;
+      if (!this._isWaitingForWheelEnd) this._canSnap = true;
+      this._isWaitingForWheelEnd = true;
     } else if (event.isEnd) {
       // wheel events have ceased and the content will have had chance to complete any scroll gradually decrement level
-      this.easeLevel(1000);
+      this._easeLevel(1000);
     }
   }
 
-  easeLevel(duration) {
-    if (this.tween) this.tween.stop();
-    this.tween = new TWEEN.Tween({ level: this.level })
+  _easeLevel(duration) {
+    if (this._tween) this._tween.stop();
+    this._tween = new TWEEN.Tween({ level: this._level })
       .to({ level: 0 }, duration)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(obj => {
-        this.level = obj.level;
+        this._level = obj.level;
       })
       .onComplete(() => {
       })
       .start();
+  }
+
+  onWheel(event) {
+    this._wheeled(event);
+    _.defer(() => {
+      if (!this._canSnap || State.isAnimating) return;
+      this._canSnap = false;
+      if (event.deltaY > 0) return this._controller.snapDown();
+      this._controller.snapUp();
+    });
   }
 
 }

@@ -1,5 +1,6 @@
 export default class WheelEvent {
-  constructor (...args) {
+
+  constructor(...args) {
     Object.assign(this, {
       deltaX: 0,
       deltaY: 0,
@@ -10,7 +11,7 @@ export default class WheelEvent {
     this.initFromValues(...args);
   }
 
-  initFromValues (e, t, i, n, s) {
+  initFromValues(e, t, i, n, s) {
     this.deltaX = e || 0;
     this.deltaY = t || 0;
     this.deltaMode = i || 0;
@@ -19,7 +20,7 @@ export default class WheelEvent {
     return this;
   }
 
-  initFromEvent (e) {
+  initFromEvent(e) {
     this.deltaX = e.deltaX;
     this.deltaY = e.deltaY;
     this.deltaMode = e.deltaMode;
@@ -28,7 +29,7 @@ export default class WheelEvent {
     return this;
   }
 
-  flip () {
+  flip() {
     this.deltaX = -this.deltaX;
     this.deltaY = -this.deltaY;
     return this;

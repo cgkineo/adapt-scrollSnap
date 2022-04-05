@@ -6,7 +6,7 @@ export default class Classes {
   static addHtmlClasses() {
     const $html = $('html');
     $html.addClass('scrollSnap');
-    if (Config.useNavigationOffet === false) $html.addClass('no-navigation-offset');
+    if (Config.useNavigationOffset === false) $html.addClass('no-navigation-offset');
   }
 
   static removeHtmlClasses() {
@@ -24,7 +24,7 @@ export default class Classes {
     const currentClasses = Config.getModelConfig(currentModel)?._htmlClasses;
     const $html = $('html');
     if (previousClasses) $html.removeClass(previousClasses);
-    if (currentClasses) (Config.isScrollSnapSize) ? $html.addClass(currentClasses) : $html.removeClass(currentClasses);
+    if (currentClasses) (Config.canUseScrollSnap) ? $html.addClass(currentClasses) : $html.removeClass(currentClasses);
   }
 
 }

@@ -5,23 +5,23 @@ import State from './State';
 
 export default class Views {
 
-  static get pageView() {
+  static get page() {
     if (!Models.isPage(Adapt.parentView?.model)) return null;
     return Adapt.parentView;
   }
 
-  static get blockViews() {
+  static get blocks() {
     function getDescendantViews(parentView) {
       const childViews = parentView.getChildViews();
       if (!childViews) return [];
       return childViews.flatMap(v => [v, ...getDescendantViews(v)]);
     }
-    const allViews = getDescendantViews(this.pageView);
+    const allViews = getDescendantViews(this.page);
     return allViews.filter(view => Models.isBlock(view.model));
   }
 
   static get currentBlockView() {
-    return this.blockViews.find(v => v.model === State.currentModel);
+    return this.blocks.find(v => v.model === State.currentModel);
   }
 
   static isScrollSnap(view) {
@@ -34,7 +34,7 @@ export default class Views {
   static setLocationId() {
     let highestOnscreen = 0;
     let highestId;
-    this.blockViews.forEach(view => {
+    this.blocks.forEach(view => {
       const id = view.model.get('_id');
       const measurements = view.$el.onscreen();
       if (!measurements.onscreen) return;
@@ -42,9 +42,9 @@ export default class Views {
       highestOnscreen = measurements.percentInview;
       highestId = id;
     });
-    const model = Models.blockModels.find(model => model.get('_id') === highestId);
+    const model = Models.blocks.find(model => model.get('_id') === highestId);
     if (!model) return;
-    State.setCurrentModel(model);
+    State.currentModel = model;
     State.locationId = highestId;
   }
 

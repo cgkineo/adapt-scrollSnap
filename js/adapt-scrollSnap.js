@@ -18,60 +18,54 @@ import State from './State';
 class ScrollSnap extends Backbone.Controller {
 
   initialize() {
-    this.wheel = new Wheel({ controller: this });
-    this.swipe = new Swipe({ controller: this });
-    this.keyboard = new Keyboard({ controller: this });
-    this.touch = new Touch({ controller: this });
-    this.scroll = new Scroll({ controller: this });
-    this.device = new Device({ controller: this });
-    this.focus = new Focus({ controller: this });
-    this.page = new Page({ controller: this });
-    this.block = new Block({ controller: this });
-    this.canSnap = true;
+    this._page = new Page({ controller: this });
+    this._block = new Block({ controller: this });
+    this._wheel = new Wheel({ controller: this });
+    this._swipe = new Swipe({ controller: this });
+    this._keyboard = new Keyboard({ controller: this });
+    this._touch = new Touch({ controller: this });
+    this._scroll = new Scroll({ controller: this });
+    this._focus = new Focus({ controller: this });
+    this._device = new Device({ controller: this });
+    State.canSnap = true;
     this.reset();
     this.listenToOnce(Adapt, 'adapt:start', this.onAdaptStart);
   }
 
   reset() {
-    this.device.reset();
-  }
-
-  onAdaptStart() {
-    if (!Config.isEnabled) return;
-    this.page.addEvents();
-    this.device.addEvents();
+    this._device.reset();
   }
 
   addEvents() {
     this.removeEvents();
-    if (!Config.isScrollSnapSize) {
-      this.scroll.addEvents();
+    if (!Config.canUseScrollSnap) {
+      this._scroll.addEvents();
       return;
     }
-    this.wheel.addEvents();
-    this.keyboard.addEvents();
-    this.touch.addEvents();
-    this.focus.addEvents();
-    this.block.addEvents();
-    if (Config.isSwipeEnabled) this.swipe.addEvents();
+    this._block.addEvents();
+    this._wheel.addEvents();
+    if (Config.isSwipeEnabled) this._swipe.addEvents();
+    this._keyboard.addEvents();
+    this._touch.addEvents();
+    this._focus.addEvents();
   }
 
   removeEvents() {
-    this.wheel.removeEvents();
-    this.swipe.removeEvents();
-    this.keyboard.removeEvents();
-    this.touch.removeEvents();
-    this.scroll.removeEvents();
-    this.focus.removeEvents();
-    this.block.removeEvents();
+    this._block.removeEvents();
+    this._wheel.removeEvents();
+    this._swipe.removeEvents();
+    this._keyboard.removeEvents();
+    this._touch.removeEvents();
+    this._scroll.removeEvents();
+    this._focus.removeEvents();
   }
 
   scrollToId(id, duration, isForced = false) {
-    if (!this.canSnap) return;
+    if (!State.canSnap) return;
     if (State.locationId === id && !isForced) return;
     this.onPreScrollTo();
     const previousModelConfig = Config.getModelConfig(State.previousModel);
-    const directionType = Models.getDirectionType();
+    const directionType = Models.directionType;
     duration = duration ?? Config.getScrollDuration(directionType, previousModelConfig) ?? Config.getScrollDuration(directionType) ?? 400;
     const settings = {
       duration: duration,
@@ -79,48 +73,31 @@ class ScrollSnap extends Backbone.Controller {
         Classes.updateHtmlClasses();
         State.locationId = id;
         State.currentModel.set('_isVisited', true);
-        this.isAnimating = false;
+        State.isAnimating = false;
         if (isForced) return;
         Navigation.update();
         Adapt.trigger('scrollsnap:scroll:complete');
       }
     };
-    if (Config.isScrollSnapSize) {
+    if (Config.canUseScrollSnap) {
       const offsetTop = (Config.useNavigationOffset) ? -$('.nav').outerHeight() : 0;
       settings.offset = { top: offsetTop };
     }
     if (this.$lastScrollTo) this.$lastScrollTo.stop();
-    this.isAnimating = true;
+    State.isAnimating = true;
     this.$lastScrollTo = $.scrollTo(`.${id}`, settings);
   }
 
-  onPreScrollTo() {
-    const model = State.currentModel;
-    const isVisited = model.get('_isVisited');
-    if (!isVisited) return;
-    const config = Config.getModelConfig(model)?._preSnap;
-    const isReRender = config?._isReRender;
-    const isReset = config?._isReset;
-    if (!isReRender && !isReset) return;
-    const components = model.getChildren();
-    components.forEach(model => {
-      if (isReset) model.reset(isReset);
-      if (!isReRender) return;
-      const view = Adapt.findViewByModelId(model.get('_id'));
-      if (view) view.render();
-    });
-  }
-
   snapUp() {
-    const currentIndex = Models.getCurrentModelIndex();
-    if (Models.getIsFirstModelIndex(currentIndex)) return;
+    const currentIndex = Models.currentIndex;
+    if (Models.isFirstIndex(currentIndex)) return;
     const index = currentIndex - 1;
     this.snapToBlockIndex(index);
   }
 
   snapDown() {
-    const currentIndex = Models.getCurrentModelIndex();
-    if (Models.getIsLastModelIndex(currentIndex)) return;
+    const currentIndex = Models.currentIndex;
+    if (Models.isLastIndex(currentIndex)) return;
     if (Models.isCurrentStepLocked) return;
     const index = currentIndex + 1;
     this.snapToBlockIndex(index);
@@ -131,15 +108,16 @@ class ScrollSnap extends Backbone.Controller {
   }
 
   snapToLimit() {
-    let index = Models.stepLockIndex;
-    if (index < 0) index = Models.lastModelIndex;
+    let index = Models.stepLockedBlockIndex;
+    if (index < 0) index = Models.lastIndex;
     this.snapToBlockIndex(index);
   }
 
   snapToBlockIndex(index) {
-    if (!this.canSnap) return;
-    State.setCurrentModel(Models.blockModels[index]);
-    this.scrollToId(State.currentModel.get('_id'));
+    if (!State.canSnap) return;
+    const model = Models.blocks[index];
+    State.currentModel = model;
+    this.scrollToId(model.get('_id'));
   }
 
   first() {
@@ -158,6 +136,29 @@ class ScrollSnap extends Backbone.Controller {
     // screen readers can move to content without scrolling so ensure location is updated first
     Views.setLocationId();
     this.snapDown();
+  }
+
+  onAdaptStart() {
+    if (!Config.isEnabled) return;
+    this._page.addEvents();
+    this._device.addEvents();
+  }
+
+  onPreScrollTo() {
+    const model = State.currentModel;
+    const isVisited = model.get('_isVisited');
+    if (!isVisited) return;
+    const config = Config.getModelConfig(model)?._preSnap;
+    const isReRender = config?._isReRender;
+    const isReset = config?._isReset;
+    if (!isReRender && !isReset) return;
+    const components = model.getChildren();
+    components.forEach(model => {
+      if (isReset) model.reset(isReset);
+      if (!isReRender) return;
+      const view = Adapt.findViewByModelId(model.get('_id'));
+      if (view) view.render();
+    });
   }
 
 }

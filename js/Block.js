@@ -7,7 +7,7 @@ import Views from './Views';
 export default class Block extends Backbone.Controller {
 
   initialize({ controller }) {
-    this.controller = controller;
+    this._controller = controller;
   }
 
   addEvents() {
@@ -15,7 +15,7 @@ export default class Block extends Backbone.Controller {
       'view:addChild': this.onAddChildView,
       'view:childAdded': this.onChildAdded
     });
-    this.listenTo(Models.pageModel, 'bubble:change:_isComplete', this.onChildComplete);
+    this.listenTo(Models.page, 'bubble:change:_isComplete', this.onChildComplete);
   }
 
   removeEvents() {
@@ -23,7 +23,7 @@ export default class Block extends Backbone.Controller {
       'view:addChild': this.onAddChildView,
       'view:childAdded': this.onChildAdded
     });
-    this.stopListening(Models.pageModel, 'bubble:change:_isComplete', this.onChildComplete);
+    this.stopListening(Models.page, 'bubble:change:_isComplete', this.onChildComplete);
   }
 
   onAddChildView(e) {
@@ -42,19 +42,19 @@ export default class Block extends Backbone.Controller {
     Models.updateLocking();
     const model = view.model;
     if (!Models.isBlock(model)) return;
-    if (!Models.isModelAutoScrollOnInteractionComplete(model)) return;
+    if (!Models.isAutoScrollOnInteractionComplete(model)) return;
     this.stopListening(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
     this.listenTo(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
   }
 
   onBlockInteractionComplete(model) {
-    if (!Config.isScrollSnapSize || !model.get('_isInteractionComplete')) return;
+    if (!Config.canUseScrollSnap || !model.get('_isInteractionComplete')) return;
     if (Adapt.notify.stack.length > 0) {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onBlockInteractionComplete(model));
       return;
     }
     // defer as next child hasn't always been added by the time this triggers
-    _.defer(() => this.controller.snapDown());
+    _.defer(() => this._controller.snapDown());
   }
 
   onChildComplete(e) {
@@ -67,10 +67,10 @@ export default class Block extends Backbone.Controller {
     _.defer(async() => {
       const model = e.target;
       if (!Models.isBlock(model)) return;
-      let stepLockBlock = Models.blockModels.find(Models.isBlockStepLocked);
-      if (!stepLockBlock) stepLockBlock = Models.blockModels[this.lastModelIndex];
+      let stepLockBlock = Models.blocks.find(Models.isBlockStepLocked);
+      if (!stepLockBlock) stepLockBlock = Models.blocks[this.lastIndex];
       if (stepLockBlock) {
-        await Views.pageView.renderTo(stepLockBlock.get('_id'));
+        await Views.page.renderTo(stepLockBlock.get('_id'));
       }
       Navigation.update();
       Adapt.trigger('scrollsnap:change:locking');
