@@ -10,7 +10,7 @@ export default class Config extends Backbone.Controller {
     return this.global?._isEnabled;
   }
 
-  static get isScrollSnapSize() {
+  static get canUseScrollSnap() {
     return Adapt.device.screenSize === 'large';
   }
 
@@ -18,7 +18,7 @@ export default class Config extends Backbone.Controller {
     return this.global._isSwipeEnabled ?? false;
   }
 
-  static get useNavigationOffet() {
+  static get useNavigationOffset() {
     return this.global._useNavigationOffet;
   }
 

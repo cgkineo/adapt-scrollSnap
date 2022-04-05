@@ -9,11 +9,11 @@ export default class Device extends Backbone.Controller {
 
   initialize({ controller }) {
     _.bindAll(this, 'onFullscreenChange');
-    this.controller = controller;
+    this._controller = controller;
   }
 
   reset() {
-    this.isFullscreenChange = false;
+    this._isFullscreenChange = false;
   }
 
   addEvents() {
@@ -33,21 +33,21 @@ export default class Device extends Backbone.Controller {
   }
 
   onFullscreenChange(e) {
-    this.isFullscreenChange = true;
+    this._isFullscreenChange = true;
   }
 
   onDeviceResize(screenSize) {
     const isFullscreen = !!document.fullscreenElement;
-    const isFullscreenResize = this.isFullscreenChange;
-    this.isFullscreenChange = false;
-    if (!Config.isScrollSnapSize || isFullscreen || isFullscreenResize) return;
-    this.controller.scrollToId(State.locationId, 0, true);
+    const isFullscreenResize = this._isFullscreenChange;
+    this._isFullscreenChange = false;
+    if (!Config.canUseScrollSnap || isFullscreen || isFullscreenResize) return;
+    this._controller.scrollToId(State.locationId, 0, true);
   }
 
   onDeviceChanged(screenSize) {
     Classes.updateHtmlClasses();
     Navigation.update();
-    if (!Config.isScrollSnapSize) Views.setLocationId();
+    if (!Config.canUseScrollSnap) Views.setLocationId();
     this.controller.addEvents();
     this.onDeviceResize(screenSize);
   }

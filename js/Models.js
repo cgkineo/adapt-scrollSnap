@@ -4,27 +4,31 @@ import State from './State';
 
 export default class Models {
 
-  static get pageModel() {
-    if (!this.isPage(Adapt.parentView.model)) return null;
-    return Adapt.parentView?.model;
+  static get page() {
+    const model = Adapt.parentView?.model;
+    if (!this.isPage(model)) return null;
+    return model;
   }
 
   static get articlesAndBlocks() {
-    const pageModel = Adapt.parentView.model;
-    return pageModel.getAllDescendantModels(true).filter(model => {
+    return this.page?.getAllDescendantModels(true).filter(model => {
       return !this.isComponent(model) && model.get('_isAvailable');
     });
   }
 
-  static get blockModels() {
+  static get blocks() {
     return this.articlesAndBlocks.filter(this.isBlock);
+  }
+
+  static get stepLockedBlockIndex() {
+    return this.blocks.findIndex(this.isBlockStepLocked.bind(this));
   }
 
   static isBlockStepLocked(block) {
     return !block.get('_isOptional') && !block.get('_isComplete');
   }
 
-  static isModelAutoScrollOnInteractionComplete(model) {
+  static isAutoScrollOnInteractionComplete(model) {
     return Config.getModelConfig(model)?._autoScrollOnInteractionComplete;
   }
 
@@ -40,55 +44,49 @@ export default class Models {
     return model?.get('_type') === 'component';
   }
 
-  static getIsFirstModelIndex(index) {
+  static isFirstIndex(index) {
     return index === 0;
   }
 
-  static getIsLastModelIndex(index) {
-    return index === this.lastModelIndex;
+  static isLastIndex(index) {
+    return index === this.lastIndex;
   }
 
-  static get lastModelIndex() {
-    return this.blockModels.length - 1;
+  static get lastIndex() {
+    return this.blocks.length - 1;
   }
 
-  static getCurrentModelIndex() {
-    return this.blockModels.indexOf(State.currentModel);
+  static get currentIndex() {
+    return this.blocks.indexOf(State.currentModel);
   }
 
-  static getPreviousModelIndex() {
-    return this.blockModels.indexOf(State.previousModel);
+  static get previousIndex() {
+    return this.blocks.indexOf(State.previousModel);
   }
 
-  static getDirectionType() {
-    const previousIndex = this.getPreviousModelIndex();
-    const currentIndex = this.getCurrentModelIndex();
-    return (previousIndex > currentIndex) ? '_previous' : '_next';
-  }
-
-  static get stepLockIndex() {
-    return this.blockModels.findIndex(this.isBlockStepLocked);
+  static get directionType() {
+    return (this.previousIndex > this.currentIndex) ? '_previous' : '_next';
   }
 
   static get isCurrentStepLocked() {
-    const index = this.getCurrentModelIndex();
-    const block = this.blockModels[index];
+    const index = this.currentIndex;
+    const block = this.blocks[index];
     return this.isBlockStepLocked(block);
   }
 
   static updateLocking() {
-    const stepLockIndex = this.stepLockIndex;
-    this.blockModels.forEach((model, index) => {
-      const isLocked = stepLockIndex >= 0 && (index > stepLockIndex);
+    const stepLockedBlockIndex = this.stepLockedBlockIndex;
+    this.blocks.forEach((model, index) => {
+      const isLocked = stepLockedBlockIndex >= 0 && (index > stepLockedBlockIndex);
       model.setOnChildren('_isLocked', isLocked);
     });
   }
 
   static shouldStopRendering(model) {
-    const stepLockIndex = Models.articlesAndBlocks.findIndex(m => Models.isBlock(m) && Models.isBlockStepLocked(m));
-    const childViewIndex = Models.articlesAndBlocks.indexOf(model);
-    const shouldStopRendering = (stepLockIndex >= 0 && (childViewIndex > stepLockIndex));
-    return shouldStopRendering;
+    const articlesAndBlocks = this.articlesAndBlocks;
+    const stepLockIndex = articlesAndBlocks.findIndex(m => Models.isBlock(m) && Models.isBlockStepLocked(m));
+    const childViewIndex = articlesAndBlocks.indexOf(model);
+    return (stepLockIndex >= 0 && (childViewIndex > stepLockIndex));
   }
 
 }

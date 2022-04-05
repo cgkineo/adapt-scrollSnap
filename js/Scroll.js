@@ -5,7 +5,7 @@ export default class Scroll extends Backbone.Controller {
   initialize({ controller }) {
     this.onScroll = _.debounce(this.onScroll, 250);
     _.bindAll(this, 'onScroll');
-    this.controller = controller;
+    this._controller = controller;
   }
 
   addEvents() {

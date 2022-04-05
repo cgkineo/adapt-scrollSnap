@@ -4,7 +4,7 @@ export default class Swipe extends Backbone.Controller {
 
   initialize({ controller }) {
     _.bindAll(this, 'onPreClick', 'onSwipeUp', 'onSwipeDown');
-    this.controller = controller;
+    this._controller = controller;
     this._hammer = null;
   }
 
@@ -24,29 +24,29 @@ export default class Swipe extends Backbone.Controller {
   /**
    * Stop scroll events triggering click on things like the mediaplayer
    */
+  blockClicks() {
+    this.isBlockingClicks = true;
+    setTimeout(() => (this.isBlockingClicks = false));
+  }
+
+  /**
+   * Stop scroll events triggering click on things like the mediaplayer
+   */
   onPreClick(event) {
     if (!this.isBlockingClicks) return;
     event.preventDefault();
     event.stopImmediatePropagation();
   }
 
-  /**
-   * Stop scroll events triggering click on things like the mediaplayer
-   */
-  blockClicks() {
-    this.isBlockingClicks = true;
-    setTimeout(() => (this.isBlockingClicks = false));
-  }
-
   onSwipeUp(event) {
     event.preventDefault();
-    this.controller.snapDown();
+    this._controller.snapDown();
     this.blockClicks();
   }
 
   onSwipeDown(event) {
     event.preventDefault();
-    this.controller.snapUp();
+    this._controller.snapUp();
     this.blockClicks();
   }
 
