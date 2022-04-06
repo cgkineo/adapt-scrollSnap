@@ -1,11 +1,10 @@
 {
   "name": "adapt-scrollSnap",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "framework": ">=5.8",
-  "homepage": "",
   "displayName" : "ScrollSnap",
   "extension" : "scrollSnap",
-  "description": "An extension which hides the scrollbar and snaps to blocks for large devices. Navigation based on swipe gestures, specific keyboard navigation, the mouse wheel, and an optional scroll button. Content is set to fill the viewport height.",
+  "description": "An extension which hides the scrollbar and snaps to blocks. Content is set to fill the viewport height.",
   "main": "/js/adapt-scrollSnap.js",
   "keywords": [
     "adapt-plugin",
