@@ -1,7 +1,6 @@
 import Navigation from './navigation.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Adapt from 'core/js/adapt';
 
 export default class NavigationView extends Backbone.View {
 
@@ -17,8 +16,9 @@ export default class NavigationView extends Backbone.View {
     };
   }
 
-  initialize() {
-    this.listenTo(this.model, 'all', this.changed);
+  initialize({ Snap }) {
+    this.Snap = Snap;
+    this.listenTo(this.model, 'change', this.changed);
     this.render();
   }
 
@@ -35,15 +35,15 @@ export default class NavigationView extends Backbone.View {
   }
 
   onPreviousClick() {
-    Adapt.scrollsnap.previous();
+    this.Snap.previous();
   }
 
   onNextClick() {
-    Adapt.scrollsnap.next();
+    this.Snap.next();
   }
 
   onLastClick() {
-    Adapt.scrollsnap.first();
+    this.Snap.first();
   }
 
 }

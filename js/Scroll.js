@@ -1,11 +1,10 @@
 import Views from './Views';
+import Config from './Config';
 
-export default class Scroll extends Backbone.Controller {
+class Scroll extends Backbone.Controller {
 
-  initialize({ controller }) {
-    this.onScroll = _.debounce(this.onScroll, 250);
-    _.bindAll(this, 'onScroll');
-    this._controller = controller;
+  initialize() {
+    this.onScroll = _.debounce(this.onScroll.bind(this), 250);
   }
 
   addEvents() {
@@ -20,4 +19,15 @@ export default class Scroll extends Backbone.Controller {
     Views.setLocationId();
   }
 
+  get offset() {
+    return {
+      top: (Config.canUseScrollSnap && Config.useNavigationOffset) ? -$('.nav').outerHeight() : 0,
+      bottom: 0,
+      left: 0,
+      right: 0
+    };
+  }
+
 }
+
+export default new Scroll();

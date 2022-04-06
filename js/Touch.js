@@ -1,10 +1,11 @@
 import Views from './Views';
+import State from './State';
+import Scroll from './Scroll';
 
 export default class Touch extends Backbone.Controller {
 
-  initialize({ controller }) {
+  initialize() {
     _.bindAll(this, 'onTouchMove', 'onTouchStart', 'onTouchEnd');
-    this._controller = controller;
   }
 
   addEvents() {
@@ -23,9 +24,6 @@ export default class Touch extends Backbone.Controller {
 
   onTouchStart(event) {
     this._start = event;
-    this.initialScrollTop = $('html')[0].scrollTop;
-    const currentBlockView = Views.currentBlockView;
-    this.initialMeasure = currentBlockView.$el.onscreen();
   }
 
   onTouchMove(event) {
@@ -33,17 +31,20 @@ export default class Touch extends Backbone.Controller {
     event.deltaY = (event.touches[0].clientY - this._start.touches[0].clientY);
     // check to see if section can be scrolled further here
     const currentBlockView = Views.currentBlockView;
-    const blockHeight = currentBlockView.$el.height();
-    const windowHeight = $(window).height();
-    if (blockHeight <= windowHeight) return;
-    if (event.deltaY < 0 && parseInt(this.initialMeasure.bottom) < 0) {
+    if (!Views.hasScrolling(currentBlockView)) return;
+    const offset = Scroll.offset;
+    const measure = currentBlockView.$el.onscreen();
+    measure.top += offset.top;
+    measure.bottom += offset.bottom;
+    const scrollAmount = -Math.abs(event.deltaY);
+    if (event.deltaY < 0 && parseInt(measure.bottom) < 0) {
+      $('html')[0].scrollTop -= Math.max(scrollAmount, measure.bottom);
       State.canSnap = false;
-      $('html')[0].scrollTop = this.initialScrollTop - _.max([event.deltaY, this.initialMeasure.bottom]);
       return;
     }
-    if (event.deltaY > 0 && parseInt(this.initialMeasure.top) < 0) {
+    if (event.deltaY > 0 && parseInt(measure.top) < 0) {
+      $('html')[0].scrollTop += Math.max(scrollAmount, measure.top);
       State.canSnap = false;
-      $('html')[0].scrollTop = this.initialScrollTop + _.max([-event.deltaY, this.initialMeasure.top]);
     }
   }
 

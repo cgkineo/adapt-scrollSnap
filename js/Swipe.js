@@ -1,10 +1,10 @@
 import 'libraries/hammer.min';
+import Snap from './Snap';
 
 export default class Swipe extends Backbone.Controller {
 
-  initialize({ controller }) {
+  initialize() {
     _.bindAll(this, 'onPreClick', 'onSwipeUp', 'onSwipeDown');
-    this._controller = controller;
     this._hammer = null;
   }
 
@@ -40,13 +40,13 @@ export default class Swipe extends Backbone.Controller {
 
   onSwipeUp(event) {
     event.preventDefault();
-    this._controller.snapDown();
+    Snap.down();
     this.blockClicks();
   }
 
   onSwipeDown(event) {
     event.preventDefault();
-    this._controller.snapUp();
+    Snap.up();
     this.blockClicks();
   }
 

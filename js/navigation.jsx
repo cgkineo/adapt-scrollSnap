@@ -4,6 +4,8 @@ import { classes } from 'core/js/reactHelpers';
 export default function Navigation(props) {
 
   const {
+    _isVisible,
+    _isEnabled,
     _isFirst,
     _isLast,
     _isStepLocked,
@@ -13,6 +15,8 @@ export default function Navigation(props) {
   const _previous = _buttons._previous;
   const _next = _buttons._next;
   const _last = _buttons._last;
+
+  if (!_isVisible || !_isEnabled) return null;
 
   return (
     <div className={classes([
@@ -48,7 +52,7 @@ export default function Navigation(props) {
       </button>
       }
 
-      {!_isLast && _last._isEnabled &&
+      {_isLast && _last._isEnabled &&
       <button className={classes([
         'btn-text scrollsnap__nav-btn scrollsnap__nav-btn-last js-btn-last',
         _last._classes

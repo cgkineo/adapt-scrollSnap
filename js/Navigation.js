@@ -6,15 +6,31 @@ import State from './State';
 
 export default class Navigation extends Backbone.Controller {
 
-  static add() {
+  static add({ Snap }) {
     const model = State.currentModel;
     const config = this.getModelConfig(model);
-    this._view = new NavigationView({ model: new Backbone.Model(config) });
+    this._view = new NavigationView({ model: new Backbone.Model(config), Snap });
     Views.page.$el.find('.page__inner').append(this._view.$el);
   }
+
   static remove() {
+    if (!this._view) return;
     this._view.remove();
     this._view = null;
+  }
+
+  static show() {
+    if (!this._view) return;
+    this._view.model.set({
+      _isVisible: true
+    });
+  }
+
+  static hide() {
+    if (!this._view) return;
+    this._view.model.set({
+      _isVisible: false
+    });
   }
 
   static update() {
