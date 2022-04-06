@@ -21,10 +21,15 @@ export default class Models {
   }
 
   static get stepLockedBlockIndex() {
-    return this.blocks.findIndex(this.isBlockStepLocked.bind(this));
+    const index = this.blocks.findIndex(this.isBlockStepLocked.bind(this));
+    return State.isTrickleEnabled
+      ? index - 1
+      : index;
   }
 
   static isBlockStepLocked(block) {
+    if (State.isTrickleKilled) return false;
+    if (State.isTrickleEnabled) return block.get('_isLocked');
     return !block.get('_isOptional') && !block.get('_isComplete');
   }
 
@@ -69,12 +74,15 @@ export default class Models {
   }
 
   static get isCurrentStepLocked() {
-    const index = this.currentIndex;
+    const index = State.isTrickleEnabled
+      ? this.currentIndex + 1
+      : this.currentIndex;
     const block = this.blocks[index];
     return this.isBlockStepLocked(block);
   }
 
   static updateLocking() {
+    if (State.isTrickleEnabled) return;
     const stepLockedBlockIndex = this.stepLockedBlockIndex;
     this.blocks.forEach((model, index) => {
       const isLocked = stepLockedBlockIndex >= 0 && (index > stepLockedBlockIndex);
@@ -83,8 +91,14 @@ export default class Models {
   }
 
   static shouldStopRendering(model) {
+    if (State.isTrickleEnabled) {
+      const articlesAndBlocks = this.articlesAndBlocks;
+      const stepLockIndex = articlesAndBlocks.findIndex(m => m.get('_isLocked'));
+      const childViewIndex = articlesAndBlocks.indexOf(model);
+      return (stepLockIndex >= 0 && (childViewIndex >= stepLockIndex));
+    }
     const articlesAndBlocks = this.articlesAndBlocks;
-    const stepLockIndex = articlesAndBlocks.findIndex(m => Models.isBlock(m) && Models.isBlockStepLocked(m));
+    const stepLockIndex = articlesAndBlocks.findIndex(m => this.isBlock(m) && this.isBlockStepLocked(m));
     const childViewIndex = articlesAndBlocks.indexOf(model);
     return (stepLockIndex >= 0 && (childViewIndex > stepLockIndex));
   }

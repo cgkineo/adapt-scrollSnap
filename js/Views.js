@@ -1,4 +1,5 @@
 import Adapt from 'core/js/adapt';
+import router from 'core/js/router';
 import Config from './Config';
 import Models from './Models';
 import State from './State';
@@ -25,10 +26,26 @@ export default class Views {
   }
 
   static isScrollSnap(view) {
-    let model = view.model;
-    if (!Models.isPage(model)) model = model.findAncestor('pages');
+    if (!view) return false;
+    const model = Models.isPage(view.model)
+      ? view.model
+      : view.model.findAncestor('page');
     const config = Config.getModelConfig(model);
-    return config?._isEnabled;
+    return Boolean(config?._isEnabled !== false && Config.isEnabled);
+  }
+
+  static get isScrollSnapActive() {
+    return Boolean(this.isScrollSnap(Adapt.parentView) && Config.canUseScrollSnap);
+  }
+
+  static hasScrolling(view) {
+    const $el = view.$el;
+    const blockHeight = Math.floor($el.height());
+    const windowHeight = Math.floor($(window).height());
+    const hasScrolling = blockHeight > windowHeight;
+    const classname = 'has-scrolling';
+    (hasScrolling) ? $el.addClass(classname) : $el.removeClass(classname);
+    return hasScrolling;
   }
 
   static setLocationId() {
@@ -46,6 +63,12 @@ export default class Views {
     if (!model) return;
     State.currentModel = model;
     State.locationId = highestId;
+  }
+
+  static async checkRenderType() {
+    const doNotRefresh = (Views.isScrollSnapActive && State.isScrollSnapViewRendered) || (!Views.isScrollSnapActive && !State.isScrollSnapViewRendered);
+    if (doNotRefresh) return;
+    router.navigateToCurrentRoute();
   }
 
 }

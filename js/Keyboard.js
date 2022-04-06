@@ -1,8 +1,9 @@
+import Snap from './Snap';
+
 export default class Keyboard extends Backbone.Controller {
 
-  initialize({ controller }) {
+  initialize() {
     _.bindAll(this, 'onKeyDown');
-    this._controller = controller;
   }
 
   addEvents() {
@@ -21,21 +22,21 @@ export default class Keyboard extends Backbone.Controller {
       case 'PageUp':
       case 33:
       // case 38:
-        this._controller.snapUp();
+        Snap.up();
         break;
       // case 'ArrowDown':
       case 'PageDown':
       case 34:
       // case 40:
-        this._controller.snapDown();
+        Snap.down();
         break;
       case 'End':
       case 35:
-        this._controller.snapToLimit();
+        Snap.toLimit();
         break;
       case 'Home':
       case 36:
-        this._controller.snapToStart();
+        Snap.toStart();
     }
   }
 

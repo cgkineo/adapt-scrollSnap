@@ -3,12 +3,10 @@ import Models from './Models';
 import Navigation from './Navigation';
 import Config from './Config';
 import Views from './Views';
+import Snap from './Snap';
+import State from './State';
 
 export default class Block extends Backbone.Controller {
-
-  initialize({ controller }) {
-    this._controller = controller;
-  }
 
   addEvents() {
     this.listenTo(Adapt, {
@@ -27,7 +25,7 @@ export default class Block extends Backbone.Controller {
   }
 
   onAddChildView(e) {
-    if (!Views.isScrollSnap(e.target)) return;
+    if (!Views.isScrollSnapActive) return;
     const model = e.model;
     if (Models.isComponent(model)) return;
     if (!Models.shouldStopRendering(model)) return;
@@ -38,10 +36,11 @@ export default class Block extends Backbone.Controller {
    * @todo Investigate why some branching views are calling this twice
    */
   onChildAdded(view) {
-    if (!Views.isScrollSnap(view)) return;
+    if (!Views.isScrollSnapActive) return;
     Models.updateLocking();
     const model = view.model;
     if (!Models.isBlock(model)) return;
+    if (Navigation.getModelConfig(model)?._isEnabled) view.$el.addClass('has-navigation');
     if (!Models.isAutoScrollOnInteractionComplete(model)) return;
     this.stopListening(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
     this.listenTo(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
@@ -54,7 +53,7 @@ export default class Block extends Backbone.Controller {
       return;
     }
     // defer as next child hasn't always been added by the time this triggers
-    _.defer(() => this._controller.snapDown());
+    _.defer(() => Snap.down());
   }
 
   onChildComplete(e) {
@@ -62,16 +61,21 @@ export default class Block extends Backbone.Controller {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onChildComplete(e));
       return;
     }
+    const childModel = e.target;
+    if (State.isTrickleEnabled) {
+      const trickleButton = childModel.getChildren().findWhere({ _component: 'trickle-button' });
+      trickleButton?.setCompletionStatus();
+    }
     Models.updateLocking();
     // defer as next child hasn't always been added by the time this triggers
     _.defer(async() => {
-      const model = e.target;
-      if (!Models.isBlock(model)) return;
-      let stepLockBlock = Models.blocks.find(Models.isBlockStepLocked);
-      if (!stepLockBlock) stepLockBlock = Models.blocks[this.lastIndex];
-      if (stepLockBlock) {
-        await Views.page.renderTo(stepLockBlock.get('_id'));
+      if (!Models.isBlock(childModel)) return;
+      let targetBlockIndex = Models.stepLockedBlockIndex;
+      if (targetBlockIndex < 0) {
+        targetBlockIndex = Models.lastIndex;
       }
+      Config.log('renderTo', Models.blocks[targetBlockIndex].get('_id'));
+      await Views.page.renderTo(Models.blocks[targetBlockIndex].get('_id'));
       Navigation.update();
       Adapt.trigger('scrollsnap:change:locking');
     });

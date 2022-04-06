@@ -5,6 +5,8 @@ import State from './State';
 import Navigation from './Navigation';
 import Config from './Config';
 import Views from './Views';
+import Snap from './Snap';
+import _ from 'underscore';
 
 export default class Page extends Backbone.Controller {
 
@@ -33,7 +35,10 @@ export default class Page extends Backbone.Controller {
   }
 
   onPagePreRender(view) {
-    if (!Views.isScrollSnap(view)) return;
+    if (!Views.isScrollSnapActive) return;
+    State.isScrollSnapViewRendered = true;
+    State.isTrickleEnabled = false;
+    this._controller.addEvents();
     Classes.addHtmlClasses();
     Models.updateLocking();
     let model = Adapt.findById(Adapt.location._currentId);
@@ -42,28 +47,31 @@ export default class Page extends Backbone.Controller {
   }
 
   onPagePostRender(view) {
-    if (!Views.isScrollSnap(view)) return;
-    Navigation.add();
+    if (!Views.isScrollSnapActive) return;
+    Navigation.add({ Snap });
   }
 
   onPageReady(view) {
-    if (!Views.isScrollSnap(view)) return;
-    this._controller.addEvents();
-    this._controller.scrollToId(State.currentModel.get('_id'), 0);
+    if (!Views.isScrollSnapActive) return;
+    Snap.toId(State.currentModel.get('_id'), 0);
+    State.canSnap = false;
     Adapt.trigger('scrollsnap:start');
+    _.delay(() => { State.canSnap = true; }, 300);
   }
 
   onPagePreRemove(view) {
-    if (!Views.page || !Views.isScrollSnap(view)) return;
+    if (!State.isScrollSnapViewRendered || !Views.isScrollSnap(view)) return;
+    State.isTrickleEnabled = true;
     Classes.removeHtmlClasses();
     Adapt.trigger('scrollsnap:stop');
     this._controller.removeEvents();
     Models.blocks.forEach(model => this.stopListening(model));
     Navigation.remove();
     this._controller.reset();
+    State.isScrollSnapViewRendered = false;
   }
 
-  onPageScrollTo(selector) {
+  onPageScrollTo(selector, settings) {
     if (!Config.canUseScrollSnap) return;
     const options = { pluginName: 'scrollSnap' };
     // prevent scrolling without navigation offset and control via plugin
@@ -79,7 +87,7 @@ export default class Page extends Backbone.Controller {
       }
       if (!Models.isBlock(model)) return;
       State.currentModel = model;
-      this._controller.scrollToId(id);
+      Snap.toId(id, settings?.duration);
     });
   }
 
