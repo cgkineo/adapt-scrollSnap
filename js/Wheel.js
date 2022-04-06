@@ -59,6 +59,8 @@ export default class Wheel extends Backbone.Controller {
     // This section is to ignore insignificant wheel events after a snap
     // Insignificant events are smaller than the last amount or less than 10
     if (this._isIgnoreAfterEnd) {
+      // If switching between the mouse and touchpad this._lastSnapAmount needs resetting
+      if (this._lastSnapAmount === 100 && amount < 100) this._lastSnapAmount = 0;
       const isInsignificantAmount = (amount < 10 || amount < this._lastSnapAmount);
       if (isInsignificantAmount) return true;
       this._isIgnoreAfterEnd = false;
