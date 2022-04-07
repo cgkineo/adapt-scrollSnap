@@ -11,6 +11,7 @@ import State from './State';
 import Scroll from './Scroll';
 import './Trickle';
 import './Visua11y';
+import Snap from './Snap';
 
 class ScrollSnap extends Backbone.Controller {
 
@@ -57,6 +58,10 @@ class ScrollSnap extends Backbone.Controller {
     if (!Config.isEnabled) return;
     this._page.addEvents();
     this._device.addEvents();
+  }
+
+  snapToBlock(model) {
+    Snap.toId(model.get('_id'));
   }
 
 }

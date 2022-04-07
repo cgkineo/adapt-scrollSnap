@@ -39,7 +39,6 @@ export default class Snap extends Backbone.Controller {
   static toBlockIndex(index) {
     if (!State.canSnap) return;
     const model = Models.blocks[index];
-    State.currentModel = model;
     this.toId(model.get('_id'));
   }
 
@@ -64,6 +63,8 @@ export default class Snap extends Backbone.Controller {
     if (!State.canSnap) return;
     if (State.locationId === id && !isForced) return;
     if (!isForced) Navigation.hide();
+    const model = Adapt.findById(id);
+    State.currentModel = model;
     A11y.showAll();
     a11y.focusFirst(Views.currentBlockView.$el, { preventScroll: true, defer: false });
     this._preScrollTo();
