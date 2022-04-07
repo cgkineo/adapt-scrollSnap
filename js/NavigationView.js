@@ -1,6 +1,7 @@
 import Navigation from './navigation.jsx';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'underscore';
 
 export default class NavigationView extends Backbone.View {
 
@@ -17,6 +18,7 @@ export default class NavigationView extends Backbone.View {
   }
 
   initialize({ Snap }) {
+    this.changed = _.debounce(this.changed, 250);
     this.Snap = Snap;
     this.listenTo(this.model, 'change', this.changed);
     this.render();

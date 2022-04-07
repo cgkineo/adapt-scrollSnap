@@ -5,6 +5,7 @@ import Config from './Config';
 import Views from './Views';
 import Snap from './Snap';
 import State from './State';
+import A11y from './A11y';
 
 export default class Block extends Backbone.Controller {
 
@@ -77,6 +78,7 @@ export default class Block extends Backbone.Controller {
       Config.log('renderTo', Models.blocks[targetBlockIndex].get('_id'));
       await Views.page.renderTo(Models.blocks[targetBlockIndex].get('_id'));
       Navigation.update();
+      A11y.hideOthers.immediate();
       Adapt.trigger('scrollsnap:change:locking');
     });
   }
