@@ -4,7 +4,6 @@ import Swipe from './Swipe';
 import Keyboard from './Keyboard';
 import Touch from './Touch';
 import Device from './Device';
-import Focus from './Focus';
 import Page from './Page';
 import Config from './Config';
 import Block from './Block';
@@ -23,7 +22,6 @@ class ScrollSnap extends Backbone.Controller {
     this._swipe = new Swipe();
     this._keyboard = new Keyboard();
     this._touch = new Touch();
-    this._focus = new Focus();
     State.canSnap = true;
     this.reset();
     this.listenToOnce(Adapt, 'adapt:start', this.onAdaptStart);
@@ -44,7 +42,6 @@ class ScrollSnap extends Backbone.Controller {
     if (Config.isSwipeEnabled) this._swipe.addEvents();
     this._keyboard.addEvents();
     this._touch.addEvents();
-    this._focus.addEvents();
   }
 
   removeEvents() {
@@ -53,7 +50,6 @@ class ScrollSnap extends Backbone.Controller {
     this._swipe.removeEvents();
     this._keyboard.removeEvents();
     this._touch.removeEvents();
-    this._focus.removeEvents();
     Scroll.removeEvents();
   }
 

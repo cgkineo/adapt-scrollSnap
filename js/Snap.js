@@ -6,6 +6,8 @@ import Config from './Config';
 import Classes from './Classes';
 import Navigation from './Navigation.js';
 import Scroll from './Scroll';
+import A11y from './A11y';
+import a11y from 'core/js/a11y';
 
 export default class Snap extends Backbone.Controller {
 
@@ -62,6 +64,8 @@ export default class Snap extends Backbone.Controller {
     if (!State.canSnap) return;
     if (State.locationId === id && !isForced) return;
     if (!isForced) Navigation.hide();
+    A11y.showAll();
+    a11y.focusFirst(Views.currentBlockView.$el, { preventScroll: true, defer: false });
     this._preScrollTo();
     const previousModelConfig = Config.getModelConfig(State.previousModel);
     const directionType = Models.directionType;
@@ -77,6 +81,9 @@ export default class Snap extends Backbone.Controller {
         if (isForced) return;
         Navigation.update();
         Navigation.show();
+        A11y.hideOthers(() => {
+          a11y.focusFirst(Views.currentBlockView.$el, { preventScroll: true, defer: false });
+        });
         Adapt.trigger('scrollsnap:scroll:complete');
       }
     };
