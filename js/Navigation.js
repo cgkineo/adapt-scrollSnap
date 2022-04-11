@@ -49,6 +49,7 @@ export default class Navigation extends Backbone.Controller {
     const data = $.extend(true, config, modelConfig, {
       _id: model.get('_id'),
       _isEnabled: isEnabled,
+      _isVisible: true,
       _isStepLocked: Models.isBlockStepLocked(model),
       _isFirst: Models.isFirstIndex(blockIndex),
       _isLast: Models.isLastIndex(blockIndex)
