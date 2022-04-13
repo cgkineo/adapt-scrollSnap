@@ -67,7 +67,8 @@ export default class Views {
 
   static async checkRenderType() {
     const doNotRefresh = (Views.isScrollSnapActive && State.isScrollSnapViewRendered) || (!Views.isScrollSnapActive && !State.isScrollSnapViewRendered);
-    if (doNotRefresh) return;
+    const isPage = Adapt.parentView?.model?.isTypeGroup('page');
+    if (!isPage || doNotRefresh) return;
     router.navigateToCurrentRoute();
   }
 
