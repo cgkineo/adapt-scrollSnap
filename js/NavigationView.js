@@ -18,7 +18,7 @@ export default class NavigationView extends Backbone.View {
   }
 
   initialize({ Snap }) {
-    this.changed = _.debounce(this.changed, 250);
+    this.changed = _.debounce(this.changed, 500);
     this.Snap = Snap;
     this.listenTo(this.model, 'change', this.changed);
     this.render();
