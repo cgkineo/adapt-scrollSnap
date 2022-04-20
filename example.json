@@ -1,12 +1,26 @@
-// course.json
-"_scrollSnap": {
+  // course.json
+  "_scrollSnap": {
     "_isEnabled": true,
     "_useNavigationOffset": false,
-    "_scrollDuration": 400,
-    "_nextButton": {
-      "label": "Scroll down to continue"
-    },
-    "_lastButton": {
-      "label": "Scroll to top"
+    "_scrollDuration": 800,
+    "_navigation": {
+      "_isEnabled": true,
+      "_buttons": {
+        "_previous": {
+          "_isEnabled": true,
+          "_classes": "",
+          "label": "Previous"
+        },
+        "_next": {
+          "_isEnabled": true,
+          "_classes": "",
+          "label": "Continue"
+        },
+        "_last": {
+          "_isEnabled": false,
+          "_classes": "",
+          "label": "Scroll to top"
+        }
+      }
     }
-  }
+  },
