@@ -3,6 +3,7 @@ import Views from './Views';
 import State from './State';
 import Snap from './Snap';
 import Scroll from './Scroll';
+import Navigation from './Navigation';
 
 export default class Wheel extends Backbone.Controller {
 
@@ -110,6 +111,7 @@ export default class Wheel extends Backbone.Controller {
       this._isIgnoreAfterEnd = true;
       this._isLocalScrolling = false;
       this.clearGesture();
+      Navigation.update();
       return;
     }
     const isDown = (this._direction < 0);

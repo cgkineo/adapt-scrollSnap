@@ -8,13 +8,17 @@ export default function Navigation(props) {
     _isEnabled,
     _isFirst,
     _isLast,
+    _isScrollAtEnd,
     _isStepLocked,
     _buttons
   } = props;
 
-  const _previous = _buttons._previous;
-  const _next = _buttons._next;
-  const _last = _buttons._last;
+  const {
+    _previous,
+    _next,
+    _last,
+    _scroll
+  } = _buttons;
 
   if (!_isVisible || !_isEnabled) return null;
 
@@ -46,7 +50,7 @@ export default function Navigation(props) {
         disabled={_isStepLocked}
       >
         <div className='scrollsnap__nav-btn-text'>
-          {_next.label}
+          {_isScrollAtEnd || !_scroll?._isEnabled ? _next.label : _scroll.label}
         </div>
         <div className='icon icon-controls-down'></div>
       </button>

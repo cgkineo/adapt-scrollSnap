@@ -48,6 +48,16 @@ export default class Views {
     return hasScrolling;
   }
 
+  static isQuestionOrAllItems(view) {
+    return view.model.findDescendantModels('component').every(model => model.isTypeGroup('question'));
+  }
+
+  static isScrollingAtEnd(view) {
+    if (!this.hasScrolling(view) || this.isQuestionOrAllItems(view)) return true;
+    const measure = view.$el.onscreen();
+    return parseInt(measure.bottom) >= 0;
+  }
+
   static setLocationId() {
     let highestOnscreen = 0;
     let highestId;

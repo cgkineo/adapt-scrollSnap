@@ -16,6 +16,11 @@
           "_classes": "",
           "label": "Continue"
         },
+        "_scroll": {
+          "_isEnabled": true,
+          "_classes": "is-scrollable",
+          "label": "Scroll down"
+        },
         "_last": {
           "_isEnabled": false,
           "_classes": "",

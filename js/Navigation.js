@@ -37,6 +37,7 @@ export default class Navigation extends Backbone.Controller {
     if (!this._view) return;
     const model = State.currentModel;
     const config = this.getModelConfig(model);
+    config._isScrollAtEnd = Views.isScrollingAtEnd(Views.currentBlockView);
     this._view.model.set(config);
   }
 

@@ -1,6 +1,7 @@
 import Views from './Views';
 import State from './State';
 import Scroll from './Scroll';
+import Navigation from './Navigation';
 
 export default class Touch extends Backbone.Controller {
 
@@ -40,16 +41,19 @@ export default class Touch extends Backbone.Controller {
     if (event.deltaY < 0 && parseInt(measure.bottom) < 0) {
       $('html')[0].scrollTop -= Math.max(scrollAmount, measure.bottom);
       State.canSnap = false;
+      Navigation.update();
       return;
     }
     if (event.deltaY > 0 && parseInt(measure.top) < 0) {
       $('html')[0].scrollTop += Math.max(scrollAmount, measure.top);
       State.canSnap = false;
+      Navigation.update();
     }
   }
 
   onTouchEnd() {
     State.canSnap = true;
+    Navigation.update();
   }
 
 }
