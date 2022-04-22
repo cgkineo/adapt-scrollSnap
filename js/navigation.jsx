@@ -44,7 +44,7 @@ export default function Navigation(props) {
       <button
         className={classes([
           'btn-text scrollsnap__nav-btn scrollsnap__nav-btn-next js-btn-next',
-          _next._classes,
+          _isScrollAtEnd || !_scroll?._isEnabled ? _next._classes : _scroll._classes
           _isStepLocked && 'is-locked is-disabled'
         ])}
         disabled={_isStepLocked}
