@@ -4,6 +4,7 @@ import { classes } from 'core/js/reactHelpers';
 export default function Navigation(props) {
 
   const {
+    _isComplete,
     _isVisible,
     _isEnabled,
     _isFirst,
@@ -44,13 +45,13 @@ export default function Navigation(props) {
       <button
         className={classes([
           'btn-text scrollsnap__nav-btn scrollsnap__nav-btn-next js-btn-next',
-          _isScrollAtEnd || !_scroll?._isEnabled ? _next._classes : _scroll._classes,
+          _isScrollAtEnd || !_scroll?._isEnabled || isComplete ? _next._classes : _scroll._classes,
           _isStepLocked && 'is-locked is-disabled'
         ])}
         disabled={_isStepLocked}
       >
         <div className='scrollsnap__nav-btn-text'>
-          {_isScrollAtEnd || !_scroll?._isEnabled ? _next.label : _scroll.label}
+          {_isScrollAtEnd || !_scroll?._isEnabled || isComplete ? _next.label : _scroll.label}
         </div>
         <div className='icon icon-controls-down'></div>
       </button>
