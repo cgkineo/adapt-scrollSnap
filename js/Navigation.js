@@ -51,6 +51,7 @@ export default class Navigation extends Backbone.Controller {
       _id: model.get('_id'),
       _isEnabled: isEnabled,
       _isVisible: true,
+      _isComplete: model?.get('_isComplete') ?? false,
       _isStepLocked: Models.isBlockStepLocked(model),
       _isFirst: Models.isFirstIndex(blockIndex),
       _isLast: Models.isLastIndex(blockIndex)
