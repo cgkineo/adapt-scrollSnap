@@ -32,7 +32,3 @@ The following attributes are set within *course.json*:
 - Content is not set to explicitly fill the browser width. If required, additional styling should be added to the theme, as the look and feel will be dependant upon the Art Direction and plugins to be used.
 
 - Not designed to work with a page-header. As the extension fills the viewport, all content should be added as components.
-
-- Currently not setup to work with [**adapt-contrib-trickle**](https://github.com/adaptlearning/adapt-contrib-trickle). Instead, blocks are step-locked until completed. Mark blocks as _isOptional to disable step-locking.
-
-- Currently not setup to work with [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-). Do not use with other plugins that permit navigation (e.g. adapt-devtools map), including use of `Adapt.navigateToElement`.
