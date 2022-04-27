@@ -12,7 +12,7 @@ export default class Config extends Backbone.Controller {
   }
 
   static get canUseScrollSnap() {
-    return Adapt.device.screenSize === 'large' && State.userPreference === USER_PREF_SCROLLSNAP;
+    return Adapt.device.screenSize === 'large' && Adapt.device.bowser?.platform?.model !== 'iPhone' && State.userPreference === USER_PREF_SCROLLSNAP;
   }
 
   static get isSwipeEnabled() {
