@@ -13,12 +13,13 @@ export default class NavigationView extends Backbone.View {
     return {
       'click .js-btn-previous': 'onPreviousClick',
       'click .js-btn-next': 'onNextClick',
+      'click .js-btn-scroll': 'onNextClick',
       'click .js-btn-last': 'onLastClick'
     };
   }
 
   initialize({ Snap }) {
-    this.changed = _.debounce(this.changed, 500);
+    this.changed = _.debounce(this.changed, 50);
     this.Snap = Snap;
     this.listenTo(this.model, 'change', this.changed);
     this.render();
@@ -37,10 +38,12 @@ export default class NavigationView extends Backbone.View {
   }
 
   onPreviousClick() {
+    if (this.Snap.scroll({ direction: 'up' })) return;
     this.Snap.previous();
   }
 
   onNextClick() {
+    if (this.Snap.scroll({ direction: 'down' })) return;
     this.Snap.next();
   }
 

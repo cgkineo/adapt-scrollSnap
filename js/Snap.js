@@ -1,13 +1,14 @@
+import Adapt from 'core/js/adapt';
+import Data from 'core/js/data';
+import a11y from 'core/js/a11y';
+import Config from './Config';
 import Models from './Models';
 import Views from './Views';
 import State from './State';
-import Adapt from 'core/js/adapt';
-import Config from './Config';
 import Classes from './Classes';
 import Navigation from './Navigation.js';
 import Scroll from './Scroll';
 import A11y from './A11y';
-import a11y from 'core/js/a11y';
 
 export default class Snap extends Backbone.Controller {
 
@@ -54,7 +55,7 @@ export default class Snap extends Backbone.Controller {
     components.forEach(model => {
       if (isReset) model.reset(isReset);
       if (!isReRender) return;
-      const view = Adapt.findViewByModelId(model.get('_id'));
+      const view = Data.findViewByModelId(model.get('_id'));
       if (view) view.render();
     });
   }
@@ -63,10 +64,13 @@ export default class Snap extends Backbone.Controller {
     if (!State.canSnap) return;
     if (State.locationId === id && !isForced) return;
     if (!isForced) Navigation.hide();
-    const model = Adapt.findById(id);
-    State.currentModel = model;
+    // capture previous view before updating `State.currentModel`
+    const $previousView = Views.currentBlockView.$el;
+    if ($previousView) $previousView.removeClass('is-inview');
+    State.currentModel = Data.findById(id);
+    const $currentView = Views.currentBlockView.$el;
     A11y.showAll();
-    a11y.focusFirst(Views.currentBlockView.$el, { preventScroll: true, defer: false });
+    a11y.focusFirst($currentView, { preventScroll: true, defer: false });
     this._preScrollTo();
     const previousModelConfig = Config.getModelConfig(State.previousModel);
     const directionType = Models.directionType;
@@ -79,12 +83,11 @@ export default class Snap extends Backbone.Controller {
         State.locationId = id;
         State.currentModel.set('_isVisited', true);
         State.isAnimating = false;
+        $currentView.addClass('is-inview');
         if (isForced) return;
         Navigation.update();
         Navigation.show();
-        A11y.hideOthers(() => {
-          a11y.focusFirst(Views.currentBlockView.$el, { preventScroll: true, defer: false });
-        });
+        A11y.hideOthers(() => a11y.focusFirst($currentView, { preventScroll: true, defer: false }));
         Adapt.trigger('scrollsnap:scroll:complete');
       }
     };
@@ -109,6 +112,35 @@ export default class Snap extends Backbone.Controller {
     // screen readers can move to content without scrolling so ensure location is updated first
     Views.setLocationId();
     this.down();
+  }
+
+  static scroll({ to = null, direction = null, deltaY = null }) {
+    if (State.isAnimating) return;
+    const currentBlockView = Views.currentBlockView;
+    if (!Views.hasScrolling(currentBlockView)) return false;
+    if (direction === 'up') deltaY = -1;
+    if (direction === 'down') deltaY = 1;
+    if (to) {
+      if (!$.contains(currentBlockView.el, to)) return;
+      // possibly add code to scroll the block to the item in focus
+      return;
+    }
+    const offset = Scroll.offset;
+    const blockMeasurement = currentBlockView.$el.onscreen();
+    blockMeasurement.top += offset.top;
+    blockMeasurement.bottom += offset.bottom;
+    const minScrollAmount = -80;
+    let finalScrollDelta = 0;
+    if (-deltaY < 0 && parseInt(blockMeasurement.bottom) < 0) {
+      finalScrollDelta = -Math.max(minScrollAmount, blockMeasurement.bottom);
+    } else if (-deltaY > 0 && parseInt(blockMeasurement.top) < 0) {
+      finalScrollDelta = Math.max(minScrollAmount, blockMeasurement.top);
+    }
+    // No scroll amount
+    if (!finalScrollDelta || Math.abs(finalScrollDelta) < Math.abs(2)) return false;
+    $('html')[0].scrollTop += finalScrollDelta;
+    Navigation.update();
+    return true;
   }
 
 }

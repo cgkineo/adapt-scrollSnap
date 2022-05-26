@@ -1,4 +1,6 @@
 import Adapt from 'core/js/adapt';
+import Data from 'core/js/data';
+import Location from 'core/js/location';
 import Classes from './Classes';
 import Models from './Models';
 import State from './State';
@@ -41,7 +43,7 @@ export default class Page extends Backbone.Controller {
     this._controller.addEvents();
     Classes.addHtmlClasses();
     Models.updateLocking();
-    let model = Adapt.findById(Adapt.location._currentId);
+    let model = Data.findById(Location._currentId);
     if (!Models.isBlock(model)) model = Models.blocks[0];
     State.currentModel = model;
   }
@@ -53,10 +55,9 @@ export default class Page extends Backbone.Controller {
 
   onPageReady(view) {
     if (!Views.isScrollSnapActive) return;
+    State.canSnap = true;
     Snap.toId(State.currentModel.get('_id'), 0);
-    State.canSnap = false;
     Adapt.trigger('scrollsnap:start');
-    _.delay(() => { State.canSnap = true; }, 300);
   }
 
   onPagePreRemove(view) {
@@ -79,7 +80,7 @@ export default class Page extends Backbone.Controller {
     _.defer(() => {
       Adapt.set('_canScroll', true, options);
       let id = selector.replace('.', '');
-      let model = Adapt.findById(id);
+      let model = Data.findById(id);
       if (!model) return;
       if (Models.isComponent(model)) {
         model = model.getParent();
