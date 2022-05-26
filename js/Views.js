@@ -39,6 +39,7 @@ export default class Views {
   }
 
   static hasScrolling(view) {
+    if (!view) return false;
     const $el = view.$el;
     const blockHeight = Math.floor($el.height());
     const windowHeight = Math.floor($(window).height());
@@ -52,10 +53,20 @@ export default class Views {
     return view.model.findDescendantModels('component').every(model => model.isTypeGroup('question'));
   }
 
+  static isScrollingAtStart(view) {
+    if (!this.hasScrolling(view) || this.isQuestion(view)) return true;
+    const measure = view.$el.onscreen();
+    const isScrollComplete = parseInt(measure.top) >= -2;
+    return isScrollComplete;
+  }
+
   static isScrollingAtEnd(view) {
     if (!this.hasScrolling(view) || this.isQuestion(view)) return true;
     const measure = view.$el.onscreen();
-    return parseInt(measure.bottom) >= 0;
+    const isScrollComplete = parseInt(measure.bottom) >= -2;
+    // set on view so reset across page sessions
+    if (isScrollComplete) view._isScrollComplete = true;
+    return isScrollComplete;
   }
 
   static setLocationId() {

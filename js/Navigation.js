@@ -37,7 +37,6 @@ export default class Navigation extends Backbone.Controller {
     if (!this._view) return;
     const model = State.currentModel;
     const config = this.getModelConfig(model);
-    config._isScrollAtEnd = Views.isScrollingAtEnd(Views.currentBlockView);
     this._view.model.set(config);
   }
 
@@ -46,15 +45,20 @@ export default class Navigation extends Backbone.Controller {
     const modelConfig = Config.getModelConfig(model)?._navigation;
     const isEnabled = modelConfig?._isEnabled ?? config?._isEnabled;
     const blockIndex = Models.blocks.indexOf(model);
+    const view = Views.currentBlockView;
     // deep merge to prevent removal of nested object data
     const data = $.extend(true, config, modelConfig, {
       _id: model.get('_id'),
       _isEnabled: isEnabled,
-      _isVisible: true,
+      _isVisible: this._view?.model.get('_isVisible') ?? true,
       _isComplete: model?.get('_isComplete') ?? false,
-      _isStepLocked: Models.isBlockStepLocked(model),
+      _isStepLocked: Models.stepLockedBlockIndex > -1 && Models.stepLockedBlockIndex <= blockIndex, // Models.isBlockStepLocked(model),
       _isFirst: Models.isFirstIndex(blockIndex),
-      _isLast: Models.isLastIndex(blockIndex)
+      _isLast: Models.isLastIndex(blockIndex),
+      _hasScrolling: Views.hasScrolling(view),
+      _isScrollAtStart: Views.isScrollingAtStart(view),
+      _isScrollAtEnd: Views.isScrollingAtEnd(view),
+      _isScrollComplete: view?._isScrollComplete ?? false
     });
     return data;
   }

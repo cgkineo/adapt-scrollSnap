@@ -1,3 +1,4 @@
+import Notify from 'core/js/notify';
 import Views from './Views';
 import State from './State';
 import Scroll from './Scroll';
@@ -24,10 +25,12 @@ export default class Touch extends Backbone.Controller {
   }
 
   onTouchStart(event) {
+    if (Notify.stack.length > 0) return;
     this._start = event;
   }
 
   onTouchMove(event) {
+    if (Notify.stack.length > 0) return;
     event.preventDefault();
     event.deltaY = (event.touches[0].clientY - this._start.touches[0].clientY);
     // check to see if section can be scrolled further here
@@ -52,6 +55,7 @@ export default class Touch extends Backbone.Controller {
   }
 
   onTouchEnd() {
+    if (Notify.stack.length > 0) return;
     State.canSnap = true;
     Navigation.update();
   }

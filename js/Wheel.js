@@ -1,4 +1,4 @@
-import Adapt from 'core/js/adapt';
+import Notify from 'core/js/notify';
 import Views from './Views';
 import State from './State';
 import Snap from './Snap';
@@ -28,22 +28,15 @@ export default class Wheel extends Backbone.Controller {
   }
 
   onWheel(event) {
-    if (Adapt.notify.stack.length > 0 || State.isAnimating) return;
-    const movement = this.getMovement(event);
-    if (this.processLocalScroll(movement)) return;
-    this.processSnap(movement);
+    if (Notify.stack.length > 0 || State.isAnimating) return;
+    const deltaY = event.deltaY;
+    if (this.processLocalScroll(deltaY)) return;
+    this.processSnap(deltaY);
   }
 
-  getMovement(event) {
-    const amount = Math.abs(event.deltaY);
+  processLocalScroll(deltaY) {
+    const amount = Math.abs(deltaY);
     this._lastAmount = amount;
-    return {
-      deltaY: event.deltaY,
-      amount
-    };
-  }
-
-  processLocalScroll({ deltaY, amount }) {
     const currentBlockView = Views.currentBlockView;
     if (!Views.hasScrolling(currentBlockView)) return false;
     const offset = Scroll.offset;
@@ -78,12 +71,13 @@ export default class Wheel extends Backbone.Controller {
     return true;
   }
 
-  processSnap({ deltaY, amount }) {
+  processSnap(deltaY) {
     /**
      * Remove the touchpad scroll events from after the peek of the scroll animation
      * - touchpad wheel events are more frequently, in smaller units and usually take a curve ramped up and then down
      * - mouse wheel events are usually a series of constant large units at a lower frequency
      */
+    const amount = Math.abs(deltaY);
     this._peakAmount = Math.max(this._peakAmount, amount);
     const isLessThanPeakAmount = (amount < this._peakAmount);
     if (isLessThanPeakAmount) return;
@@ -92,7 +86,7 @@ export default class Wheel extends Backbone.Controller {
     if (hasDirectionChanged) this.clearGesture();
     this._direction = currentDirection;
     this._totalAmount += amount;
-    this.onEnd(amount);
+    this.onEnd();
   }
 
   /**

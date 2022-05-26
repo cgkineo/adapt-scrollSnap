@@ -44,6 +44,7 @@ export default class Device extends Backbone.Controller {
     this._isFullscreenChange = false;
     if (!Config.canUseScrollSnap || isFullscreen || isFullscreenResize) return;
     Snap.toId(State.locationId, 0, true);
+    Navigation.update();
   }
 
   onDeviceChanged(screenSize) {

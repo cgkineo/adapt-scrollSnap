@@ -2,7 +2,13 @@
   "_scrollSnap": {
     "_isEnabled": true,
     "_useNavigationOffset": false,
-    "_scrollDuration": 800,
+    "_scrollDuration": {
+      "_previous": 400,
+      "_next": 400
+    },
+    "_isSwipeEnabled": true,
+    "_isGlobalMenuScroll": true,
+    "_isGlobalNotifyScroll": true,
     "_navigation": {
       "_isEnabled": true,
       "_buttons": {
@@ -16,16 +22,27 @@
           "_classes": "",
           "label": "Continue"
         },
-        "_scroll": {
-          "_isEnabled": true,
-          "_classes": "is-scrollable",
-          "label": "Scroll down"
-        },
         "_last": {
           "_isEnabled": false,
           "_classes": "",
           "label": "Scroll to top"
         }
+      },
+      "_prompts": {
+        "_scroll": {
+          "_isEnabled": true,
+          "_classes": "",
+          "label": "Scroll down"
+        }
       }
     }
-  },
+  }
+
+// optional blocks.json configurations
+  "_scrollSnap": {
+    "_htmlClasses": "",
+    "_preSnap": {
+      "_isReRender": false,
+      "_isReset": false
+    }
+  }
