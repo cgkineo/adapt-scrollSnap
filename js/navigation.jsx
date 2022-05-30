@@ -82,6 +82,20 @@ export default function Navigation(props) {
       </button>
       }
 
+      {_scroll._isEnabled && _hasScrolling && !_isScrollAtEnd &&
+      <button
+        className={classes([
+          'btn-text scrollsnap__nav-btn scrollsnap__nav-btn-next js-btn-next',
+          _scroll._classes
+        ])}
+      >
+        <div className='scrollsnap__nav-btn-text'>
+          {_scroll.label}
+        </div>
+        <div className='icon icon-controls-down' aria-hidden='true'></div>
+      </button>
+      }
+
     </div>
   );
 }
