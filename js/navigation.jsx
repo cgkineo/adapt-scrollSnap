@@ -30,6 +30,8 @@ export default function Navigation(props) {
 
   if (!_isVisible || !_isEnabled) return null;
 
+  const isScrolling = (_scroll._isEnabled && _hasScrolling && !_isScrollAtEnd);
+
   return (
     <div className={classes([
       'scrollsnap__nav-inner',
@@ -51,17 +53,18 @@ export default function Navigation(props) {
       </button>
       }
 
-      {!_isLast && _next._isEnabled && (!_scroll._isEnabled || !_hasScrolling || _isScrollAtEnd) &&
+      {((!_isLast && _next._isEnabled) || isScrolling) &&
       <button
         className={classes([
           'btn-text scrollsnap__nav-btn scrollsnap__nav-btn-next js-btn-next',
-          _next._classes,
-          _isStepLocked && 'is-locked is-disabled'
+          isScrolling ? _scroll._classes : _next._classes,
+          !isScrolling && _isStepLocked && 'is-locked is-disabled'
         ])}
-        disabled={_isStepLocked}
+        disabled={!isScrolling && _isStepLocked}
+        aria-live='assertive'
       >
         <div className='scrollsnap__nav-btn-text'>
-          {_next.label}
+          {isScrolling ? _scroll.label : _next.label}
         </div>
         <div className='icon icon-controls-down' aria-hidden='true'></div>
       </button>
@@ -76,20 +79,6 @@ export default function Navigation(props) {
         <div className='scrollsnap__nav-btn-text'>
           {_last.label}
         </div>
-      </button>
-      }
-
-      {_scroll._isEnabled && _hasScrolling && !_isScrollAtEnd &&
-      <button
-        className={classes([
-          'btn-text scrollsnap__nav-btn scrollsnap__nav-btn-next js-btn-next',
-          _scroll._classes
-        ])}
-      >
-        <div className='scrollsnap__nav-btn-text'>
-          {_scroll.label}
-        </div>
-        <div className='icon icon-controls-down' aria-hidden='true'></div>
       </button>
       }
 

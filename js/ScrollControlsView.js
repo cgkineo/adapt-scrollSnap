@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { templates } from 'core/js/reactHelpers';
 import _ from 'underscore';
+import Config from './Config';
 
 export default class ScrollControlsView extends Backbone.View {
 
@@ -24,7 +25,9 @@ export default class ScrollControlsView extends Backbone.View {
   }
 
   render() {
+    const config = $.extend(true, {}, Config.global?._navigation);
     const props = {
+      ...config,
       onClick: this.onClick
     };
     ReactDOM.render(<templates.ScrollControls {...props} />, this.el);
