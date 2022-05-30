@@ -8,6 +8,7 @@ export default function NotifyScrollControls(props) {
   const {
     _scroll
   } = _prompts;
+
   return (
     <div className='scrollsnap__controls-inner'>
       <button

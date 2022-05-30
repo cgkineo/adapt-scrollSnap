@@ -5,6 +5,7 @@ import { templates } from 'core/js/reactHelpers';
 import _ from 'underscore';
 import Config from './Config';
 
+
 export default class ScrollControlsView extends Backbone.View {
 
   className() {
