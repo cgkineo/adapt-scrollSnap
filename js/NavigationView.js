@@ -1,4 +1,4 @@
-import Navigation from './navigation.jsx';
+import { templates } from 'core/js/reactHelpers';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'underscore';
@@ -29,7 +29,7 @@ export default class NavigationView extends Backbone.View {
     const props = {
       ...this.model.toJSON()
     };
-    ReactDOM.render(<Navigation { ...props } />, this.el);
+    ReactDOM.render(<templates.ScrollSnapNavigation { ...props } />, this.el);
   }
 
   render() {

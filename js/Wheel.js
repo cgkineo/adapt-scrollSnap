@@ -1,9 +1,11 @@
+import Adapt from 'core/js/adapt';
 import Notify from 'core/js/notify';
 import Views from './Views';
 import State from './State';
 import Snap from './Snap';
 import Scroll from './Scroll';
 import Navigation from './Navigation';
+import Config from './Config';
 
 export default class Wheel extends Backbone.Controller {
 
@@ -113,6 +115,7 @@ export default class Wheel extends Backbone.Controller {
     this.clearGesture();
     if (!isSnap) return;
     this._isIgnoreAfterEnd = true;
+    if (Config.getModelConfig(Adapt.course)?._isOverscrollSnapEnabled === false) return;
     if (isDown) return Snap.down();
     Snap.up();
   }

@@ -9,30 +9,36 @@
     "_isSwipeEnabled": true,
     "_isGlobalMenuScroll": true,
     "_isGlobalNotifyScroll": true,
+    "_isOverscrollSnapEnabled": true,
     "_navigation": {
       "_isEnabled": true,
       "_buttons": {
         "_previous": {
           "_isEnabled": true,
           "_classes": "",
-          "label": "Previous"
+          "label": "Previous",
+          "_icon": "icon-controls-up"
         },
         "_next": {
           "_isEnabled": true,
           "_classes": "",
-          "label": "Continue"
+          "label": "Continue",
+          "_icon": "icon-controls-down"
         },
         "_last": {
           "_isEnabled": false,
           "_classes": "",
-          "label": "Scroll to top"
+          "label": "Scroll to top",
+          "_icon": "icon-controls-up"
         }
       },
       "_prompts": {
         "_scroll": {
           "_isEnabled": true,
-          "_classes": "",
-          "label": "Scroll down"
+          "_previousClasses": "",
+          "_nextClasses": "",
+          "previousLabel": "Scroll up",
+          "nextLabel": "Scroll down"
         }
       }
     }
@@ -40,6 +46,7 @@
 
 // optional blocks.json configurations
   "_scrollSnap": {
+    "_autoScrollOnInteractionComplete": false,
     "_htmlClasses": "",
     "_preSnap": {
       "_isReRender": false,

@@ -1,4 +1,5 @@
 import Adapt from 'core/js/adapt';
+import Notify from 'core/js/notify';
 import Models from './Models';
 import Navigation from './Navigation';
 import Config from './Config';
@@ -6,6 +7,7 @@ import Views from './Views';
 import Snap from './Snap';
 import State from './State';
 import A11y from './A11y';
+import _ from 'underscore';
 
 export default class Block extends Backbone.Controller {
 
@@ -42,6 +44,7 @@ export default class Block extends Backbone.Controller {
     const model = view.model;
     if (!Models.isBlock(model)) return;
     if (Navigation.getModelConfig(model)?._isEnabled) view.$el.addClass('has-navigation');
+    Navigation.update();
     if (!Models.isAutoScrollOnInteractionComplete(model)) return;
     this.stopListening(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
     this.listenTo(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
@@ -49,7 +52,7 @@ export default class Block extends Backbone.Controller {
 
   onBlockInteractionComplete(model) {
     if (!Config.canUseScrollSnap || !model.get('_isInteractionComplete')) return;
-    if (Adapt.notify.stack.length > 0) {
+    if (Notify.stack.length > 0) {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onBlockInteractionComplete(model));
       return;
     }
@@ -58,7 +61,8 @@ export default class Block extends Backbone.Controller {
   }
 
   onChildComplete(e) {
-    if (Adapt.notify.stack.length > 0) {
+    _.defer(() => Navigation.update());
+    if (Notify.stack.length > 0) {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onChildComplete(e));
       return;
     }

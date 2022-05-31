@@ -1,7 +1,5 @@
-// import Models from './Models';
 import _ from 'underscore';
 import Snap from './Snap';
-// import State from './State';
 
 /**
  * This section is expressly for keyboard tabbing only

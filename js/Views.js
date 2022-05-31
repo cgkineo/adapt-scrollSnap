@@ -54,14 +54,14 @@ export default class Views {
   }
 
   static isScrollingAtStart(view) {
-    if (!this.hasScrolling(view) || this.isQuestion(view)) return true;
+    if (!this.hasScrolling(view)) return true;
     const measure = view.$el.onscreen();
     const isScrollComplete = parseInt(measure.top) >= -2;
     return isScrollComplete;
   }
 
   static isScrollingAtEnd(view) {
-    if (!this.hasScrolling(view) || this.isQuestion(view)) return true;
+    if (!this.hasScrolling(view)) return true;
     const measure = view.$el.onscreen();
     const isScrollComplete = parseInt(measure.bottom) >= -2;
     // set on view so reset across page sessions
