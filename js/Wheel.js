@@ -1,5 +1,4 @@
 import Adapt from 'core/js/adapt';
-import Notify from 'core/js/notify';
 import Views from './Views';
 import State from './State';
 import Snap from './Snap';
@@ -9,7 +8,8 @@ import Config from './Config';
 
 export default class Wheel extends Backbone.Controller {
 
-  initialize() {
+  initialize({ controller }) {
+    this._controller = controller;
     _.bindAll(this, 'onWheel');
     this.onEnd = _.debounce(this.onEnd.bind(this), 250);
     this._canSnap = false;
@@ -30,7 +30,7 @@ export default class Wheel extends Backbone.Controller {
   }
 
   onWheel(event) {
-    if (Notify.stack.length > 0 || State.isAnimating) return;
+    if (!State.canScroll || State.isAnimating) return;
     const deltaY = event.deltaY;
     if (this.processLocalScroll(deltaY)) return;
     this.processSnap(deltaY);

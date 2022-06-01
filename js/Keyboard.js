@@ -1,8 +1,10 @@
 import Snap from './Snap';
+import State from './State';
 
 export default class Keyboard extends Backbone.Controller {
 
-  initialize() {
+  initialize({ controller }) {
+    this._controller = controller;
     _.bindAll(this, 'onKeyDown');
   }
 
@@ -15,6 +17,7 @@ export default class Keyboard extends Backbone.Controller {
   }
 
   onKeyDown(event) {
+    if (!State.canScroll || !State.canSnap) return;
     const key = event.key || event.code || event.keyCode;
     // disable arrow keys to avoid conflict with screen readers
     switch (key) {

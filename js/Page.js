@@ -14,6 +14,7 @@ export default class Page extends Backbone.Controller {
 
   initialize({ controller }) {
     this._controller = controller;
+    _.bindAll(this, 'onPageResize');
   }
 
   addEvents() {
@@ -43,6 +44,7 @@ export default class Page extends Backbone.Controller {
     this._controller.addEvents();
     Classes.addHtmlClasses();
     Models.updateLocking();
+    Views.page.$el.on('resize', this.onPageResize);
     let model = Data.findById(Location._currentId);
     if (!Models.isBlock(model)) model = Models.blocks[0];
     State.currentModel = model;
@@ -56,6 +58,7 @@ export default class Page extends Backbone.Controller {
   onPageReady(view) {
     if (!Views.isScrollSnapActive) return;
     State.canSnap = true;
+    State.canScroll = true;
     Snap.toId(State.currentModel.get('_id'), 0);
     Adapt.trigger('scrollsnap:start');
   }
@@ -68,6 +71,9 @@ export default class Page extends Backbone.Controller {
     this._controller.removeEvents();
     Models.blocks.forEach(model => this.stopListening(model));
     Navigation.remove();
+    State.canSnap = false;
+    State.canScroll = false;
+    Views.page.$el.off('resize', this.onPageResize);
     this._controller.reset();
     State.isScrollSnapViewRendered = false;
   }
@@ -90,6 +96,10 @@ export default class Page extends Backbone.Controller {
       State.currentModel = model;
       Snap.toId(id, settings?.duration);
     });
+  }
+
+  onPageResize() {
+    Navigation.update();
   }
 
 }

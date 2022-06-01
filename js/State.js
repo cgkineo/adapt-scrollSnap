@@ -40,6 +40,14 @@ export default class State {
     this._canSnap = value;
   }
 
+  static get canScroll() {
+    return this._canScroll;
+  }
+
+  static set canScroll(value) {
+    this._canScroll = value;
+  }
+
   static get isAnimating() {
     return this._isAnimating;
   }
