@@ -9,6 +9,7 @@ import Classes from './Classes';
 import Navigation from './Navigation.js';
 import Scroll from './Scroll';
 import A11y from './A11y';
+import _ from 'underscore';
 
 export default class Snap extends Backbone.Controller {
 
@@ -63,37 +64,40 @@ export default class Snap extends Backbone.Controller {
   static toId(id, duration, isForced = false) {
     if (!State.canSnap) return;
     if (State.locationId === id && !isForced) return;
-    if (!isForced) Navigation.hide();
+    if (!isForced) Navigation.pause();
     // capture previous view before updating `State.currentModel`
     const $previousView = Views.currentBlockView.$el;
     if ($previousView) $previousView.removeClass('is-inview');
     State.currentModel = Data.findById(id);
     const $currentView = Views.currentBlockView.$el;
-    A11y.showAll();
-    a11y.focusFirst($currentView, { preventScroll: true, defer: false });
     this._preScrollTo();
-    const previousModelConfig = Config.getModelConfig(State.previousModel);
-    const directionType = Models.directionType;
-    duration = duration ?? Config.getScrollDuration(directionType, previousModelConfig) ?? Config.getScrollDuration(directionType) ?? 400;
-    const settings = {
-      duration,
-      offset: { top: Scroll.offset.top },
-      complete: () => {
-        Classes.updateHtmlClasses();
-        State.locationId = id;
-        State.currentModel.set('_isVisited', true);
-        State.isAnimating = false;
-        $currentView.addClass('is-inview');
-        if (isForced) return;
-        Navigation.update();
-        Navigation.show();
-        A11y.hideOthers(() => a11y.focusFirst($currentView, { preventScroll: true, defer: false }));
-        Adapt.trigger('scrollsnap:scroll:complete');
-      }
-    };
-    if (this.$lastScrollTo) this.$lastScrollTo.stop();
-    State.isAnimating = true;
-    this.$lastScrollTo = $.scrollTo(`.${id}`, settings);
+    A11y.showAll();
+    _.delay(() => {
+      a11y.focusFirst($currentView, { preventScroll: true, defer: false });
+      const previousModelConfig = Config.getModelConfig(State.previousModel);
+      const directionType = Models.directionType;
+      duration = duration ?? Config.getScrollDuration(directionType, previousModelConfig) ?? Config.getScrollDuration(directionType) ?? 400;
+      const settings = {
+        duration,
+        offset: { top: Scroll.offset.top },
+        complete: () => {
+          Classes.updateHtmlClasses();
+          State.locationId = id;
+          State.currentModel.set('_isVisited', true);
+          State.isAnimating = false;
+          $currentView.addClass('is-inview');
+          if (isForced) return;
+          A11y.hideOthers();
+          a11y.focusFirst($currentView, { preventScroll: true, defer: true });
+          Navigation.play();
+          Navigation.update();
+          Adapt.trigger('scrollsnap:scroll:complete');
+        }
+      };
+      if (this.$lastScrollTo) this.$lastScrollTo.stop();
+      State.isAnimating = true;
+      this.$lastScrollTo = $.scrollTo(`.${id}`, settings);
+    }, 100);
   }
 
   static first() {

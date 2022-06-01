@@ -73,12 +73,11 @@ export default class State {
   }
 
   static get isTrickleEnabled() {
-    return this._isTrickleEnabled && Adapt.parentView?.model?.findDescendantModels('component').some(component => component.get('_component') === 'trickle-button');
+    return Adapt.parentView?.model?.findDescendantModels('component').some(component => component.get('_component') === 'trickle-button');
   }
 
   static set isTrickleEnabled(isEnabled) {
-    this._isTrickleEnabled = isEnabled;
-    if (!this._isTrickleEnabled) return;
+    if (!this.isTrickleEnabled) return;
     Adapt.blocks.forEach(block => {
       block.getChildren().where({ _component: 'trickle-button' }).forEach(trickleButton => {
         trickleButton.set('_isAvailable', isEnabled);

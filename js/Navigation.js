@@ -19,6 +19,20 @@ export default class Navigation extends Backbone.Controller {
     this._view = null;
   }
 
+  static pause() {
+    if (!this._view) return;
+    this._view.model.set({
+      _isPaused: true
+    });
+  }
+
+  static play() {
+    if (!this._view) return;
+    this._view.model.set({
+      _isPaused: false
+    });
+  }
+
   static show() {
     if (!this._view) return;
     this._view.model.set({
