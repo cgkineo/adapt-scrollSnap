@@ -1,6 +1,6 @@
 import Adapt from 'core/js/adapt';
 import Focus from './Focus';
-import Notify from './Notify';
+import Popups from './Popups';
 import Wheel from './Wheel';
 import Swipe from './Swipe';
 import Keyboard from './Keyboard';
@@ -22,12 +22,13 @@ class ScrollSnap extends Backbone.Controller {
     this._page = new Page({ controller: this });
     this._device = new Device({ controller: this });
     this._block = new Block();
-    this._wheel = new Wheel();
-    this._swipe = new Swipe();
-    this._keyboard = new Keyboard();
-    this._touch = new Touch();
+    this._wheel = new Wheel({ controller: this });
+    this._swipe = new Swipe({ controller: this });
+    this._keyboard = new Keyboard({ controller: this });
+    this._touch = new Touch({ controller: this });
     this._focus = new Focus();
     State.canSnap = false;
+    State.canScroll = false;
     this.reset();
     this.listenToOnce(Adapt, 'adapt:start', this.onAdaptStart);
   }
@@ -48,7 +49,7 @@ class ScrollSnap extends Backbone.Controller {
     if (Config.isSwipeEnabled) this._swipe.addEvents();
     this._keyboard.addEvents();
     this._touch.addEvents();
-    this._notify.addEvents();
+    this._popups.addEvents();
     this._menu.addEvents();
   }
 
@@ -59,13 +60,13 @@ class ScrollSnap extends Backbone.Controller {
     this._swipe.removeEvents();
     this._keyboard.removeEvents();
     this._touch.removeEvents();
-    this._notify.removeEvents();
+    this._popups.removeEvents();
     this._menu.removeEvents();
     Scroll.removeEvents();
   }
 
   onAdaptStart() {
-    this._notify = new Notify();
+    this._popups = new Popups();
     this._menu = new Menu();
     if (!Config.isEnabled) return;
     this._page.addEvents();
