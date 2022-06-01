@@ -26,6 +26,7 @@ export default class NavigationView extends Backbone.View {
   }
 
   changed() {
+    if (this.model.get('_isPaused')) return;
     const props = {
       ...this.model.toJSON()
     };
@@ -38,16 +39,19 @@ export default class NavigationView extends Backbone.View {
   }
 
   onPreviousClick() {
+    if (this.model.get('_isPaused')) return;
     if (this.Snap.scroll({ direction: 'up' })) return;
     this.Snap.previous();
   }
 
   onNextClick() {
+    if (this.model.get('_isPaused')) return;
     if (this.Snap.scroll({ direction: 'down' })) return;
     this.Snap.next();
   }
 
   onLastClick() {
+    if (this.model.get('_isPaused')) return;
     this.Snap.first();
   }
 

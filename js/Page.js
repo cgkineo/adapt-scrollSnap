@@ -14,7 +14,7 @@ export default class Page extends Backbone.Controller {
 
   initialize({ controller }) {
     this._controller = controller;
-    _.bindAll(this, 'onPageResize');
+    this.onPageResize = _.debounce(this.onPageResize.bind(this), 50);
   }
 
   addEvents() {
