@@ -7,8 +7,8 @@
       "_next": 400
     },
     "_isSwipeEnabled": true,
-    "_isGlobalMenuScroll": true,
-    "_isGlobalNotifyScroll": true,
+    "_isGlobalMenuScroll": false,
+    "_isGlobalNotifyScroll": false,
     "_isOverscrollSnapEnabled": true,
     "_navigation": {
       "_isEnabled": true,
