@@ -1,6 +1,7 @@
 import Adapt from 'core/js/adapt';
 import Config from './Config';
 import State from './State';
+import Views from './Views';
 
 export default class Models {
 
@@ -91,14 +92,13 @@ export default class Models {
   }
 
   static shouldStopRendering(model) {
-    if (State.isTrickleEnabled) {
-      const articlesAndBlocks = this.articlesAndBlocks;
-      const stepLockIndex = articlesAndBlocks.findIndex(m => m.get('_isLocked'));
-      const childViewIndex = articlesAndBlocks.indexOf(model);
-      return (stepLockIndex >= 0 && (childViewIndex >= stepLockIndex));
-    }
     const articlesAndBlocks = this.articlesAndBlocks;
-    const stepLockIndex = articlesAndBlocks.findIndex(m => this.isBlock(m) && this.isBlockStepLocked(m));
+    let stepLockIndex;
+    if (!Views.isScrollSnapActive && State.isTrickleEnabled) {
+      stepLockIndex = articlesAndBlocks.findIndex(m => m.get('_isLocked'));
+    } else {
+      stepLockIndex = articlesAndBlocks.findIndex(m => this.isBlock(m) && this.isBlockStepLocked(m));
+    }
     const childViewIndex = articlesAndBlocks.indexOf(model);
     return (stepLockIndex >= 0 && (childViewIndex > stepLockIndex));
   }
