@@ -1,8 +1,6 @@
 html.scrollSnap {
-  @ios-address-height: 64px;
-
   .full-vh {
-    min-height: calc(100vh - @navigation-height) !important;
+    min-height: calc(var(--adapt-viewport-height) - @navigation-height) !important;
     padding-top: @navigation-height;
     padding-bottom: @navigation-height;
   }
@@ -24,24 +22,8 @@ html.scrollSnap {
     &.no-navigation-offset {
       .block:not(.no-full-vh) {
         .component__container {
-          min-height: 100vh !important;
+          min-height: var(--adapt-viewport-height) !important;
           margin: 0 auto;
-        }
-      }
-    }
-
-    &.os-ios {
-      .block:not(.no-full-vh) {
-        .component__container {
-          min-height: calc(100vh - @ios-address-height - @navigation-height) !important;
-        }
-      }
-    }
-
-    &.os-ios.no-navigation-offset {
-      .block:not(.no-full-vh) {
-        .component__container {
-          min-height: calc(100vh - @ios-address-height) !important;
         }
       }
     }
