@@ -15,11 +15,12 @@ const cancellableDebounce = function (original, timeout) {
 
 class A11y {
 
-  static hideOthers() {
+  static hideOthers(callback) {
     const currentBlockView = Views.currentBlockView;
     const otherBlockViews = Views.blocks.filter(view => view !== currentBlockView);
     otherBlockViews.forEach(view => view.$el.addClass('is-scrollsnap-hidden').attr('aria-hidden', 'true'));
     currentBlockView.$el.removeClass('is-scrollsnap-hidden').removeAttr('aria-hidden');
+    callback?.();
   }
 
   static showAll() {

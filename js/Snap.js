@@ -86,12 +86,12 @@ export default class Snap extends Backbone.Controller {
           State.currentModel.set('_isVisited', true);
           State.isAnimating = false;
           $currentView.addClass('is-inview');
-          if (isForced) return;
-          A11y.hideOthers();
-          a11y.focusFirst($currentView, { preventScroll: true, defer: true });
-          Navigation.play();
-          Navigation.update();
-          Adapt.trigger('scrollsnap:scroll:complete');
+          A11y.hideOthers(() => {
+            a11y.focusFirst($currentView, { preventScroll: true, defer: true });
+            Navigation.play();
+            Navigation.update();
+            Adapt.trigger('scrollsnap:scroll:complete');
+          });
         }
       };
       if (this.$lastScrollTo) this.$lastScrollTo.stop();
