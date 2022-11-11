@@ -12,16 +12,23 @@
   }
 
   &-inner {
+    opacity: 1;
+    transition: opacity 0.4s ease;
     display: flex;
     justify-content: center;
+
+    &.is-paused {
+      opacity: 0;
+    }
   }
 
   &-btn {
     pointer-events: auto;
-  }
 
-  opacity: 1;
-  transition: opacity 0.4s ease;
+    .is-paused & {
+      pointer-events: none;
+    }
+  }
 
   &.is-hidden,
   .is-hidden,

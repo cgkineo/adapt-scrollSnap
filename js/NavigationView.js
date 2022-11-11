@@ -26,7 +26,6 @@ export default class NavigationView extends Backbone.View {
   }
 
   changed() {
-    if (this.model.get('_isPaused')) return;
     const props = {
       ...this.model.toJSON()
     };

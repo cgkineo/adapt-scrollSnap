@@ -10,6 +10,7 @@ export default class Navigation extends Backbone.Controller {
     const model = State.currentModel;
     const config = this.getModelConfig(model);
     this._view = new NavigationView({ model: new Backbone.Model(config), Snap });
+    this.pause();
     Views.page.$el.find('.page__inner').append(this._view.$el);
   }
 

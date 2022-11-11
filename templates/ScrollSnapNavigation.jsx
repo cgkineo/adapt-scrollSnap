@@ -4,9 +4,10 @@ import { classes } from 'core/js/reactHelpers';
 export default function Navigation(props) {
 
   const {
-    _isComplete,
     _isVisible,
     _isEnabled,
+    _isPaused,
+    _isComplete,
     _isFirst,
     _isLast,
     _isScrollAtStart,
@@ -36,6 +37,7 @@ export default function Navigation(props) {
   return (
     <div className={classes([
       'scrollsnap__nav-inner',
+      _isPaused && 'is-paused',
       _isFirst && 'is-first',
       _hasScrolling && 'has-scrolling',
       _isScrollComplete && 'is-scroll-complete',
