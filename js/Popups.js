@@ -6,15 +6,7 @@ import Views from './Views';
 
 export default class Popups extends Backbone.Controller {
 
-  initialize() {
-    this.hasAddedEvents = false;
-    this.isGlobal = Config.global._isGlobalNotifyScroll ?? true;
-    if (this.isGlobal) this.addEvents();
-  }
-
   addEvents() {
-    if (this.isGlobal && this.hasAddedEvents) return;
-    this.hasAddedEvents = true;
     this.listenTo(Adapt, {
       'notify:opened': this.onNotifyOpened,
       'notify:closed': this.onNotifyClosed,
@@ -24,7 +16,6 @@ export default class Popups extends Backbone.Controller {
   }
 
   removeEvents() {
-    if (this.isGlobal) return;
     this.stopListening(Adapt, {
       'notify:opened': this.onNotifyOpened,
       'notify:closed': this.onNotifyClosed,
@@ -34,18 +25,22 @@ export default class Popups extends Backbone.Controller {
   }
 
   onNotifyOpened(view) {
+    if (!Views.isScrollSnapActive) return;
+    State.canScroll = false;
+    State.canSnap = false;
+    if (!Config.isGlobalNotifyScroll) return;
     view.scrollControlsView = new ScrollControlsView({
       $parent: view.$el,
       $scrollContainer: view.$('.notify__popup')
     });
-    State.canScroll = false;
-    State.canSnap = false;
   }
 
   onNotifyClosed(view) {
-    view.scrollControlsView.remove();
+    if (!Views.isScrollSnapActive) return;
     State.canScroll = true;
     State.canSnap = true;
+    if (!Config.isGlobalNotifyScroll) return;
+    view.scrollControlsView.remove();
   }
 
   onDrawerOpened(view) {

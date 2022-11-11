@@ -16,7 +16,11 @@ export default class Config extends Backbone.Controller {
   }
 
   static get isSwipeEnabled() {
-    return this.global._isSwipeEnabled ?? true;
+    return this.global?._isSwipeEnabled ?? true;
+  }
+
+  static get isGlobalNotifyScroll() {
+    return this.global?._isGlobalNotifyScroll ?? false;
   }
 
   static get useNavigationOffset() {
