@@ -56,8 +56,12 @@ export default class Block extends Backbone.Controller {
       this.listenToOnce(Adapt, 'notify:closed', () => this.onBlockInteractionComplete(model));
       return;
     }
+
     // defer as next child hasn't always been added by the time this triggers
-    _.defer(() => Snap.down());
+    _.defer(async() => {
+      await Adapt.parentView.whenReady();
+      Snap.down()
+    });
   }
 
   onChildComplete(e) {
@@ -76,11 +80,10 @@ export default class Block extends Backbone.Controller {
     _.defer(async() => {
       if (!Models.isBlock(childModel)) return;
       let targetBlockIndex = Models.stepLockedBlockIndex;
-      if (targetBlockIndex < 0) {
-        targetBlockIndex = Models.lastIndex;
-      }
-      Config.log('renderTo', Models.blocks[targetBlockIndex].get('_id'));
-      await Views.page.renderTo(Models.blocks[targetBlockIndex].get('_id'));
+      if (targetBlockIndex < 0) targetBlockIndex = Models.lastIndex;
+      const id = Models.blocks[targetBlockIndex].get('_id')
+      Config.log('renderTo', id);
+      await Views.page.renderTo(id);
       Navigation.update();
       A11y.hideOthers.immediate();
       Adapt.trigger('scrollsnap:change:locking');
