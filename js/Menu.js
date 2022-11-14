@@ -1,6 +1,7 @@
 import Adapt from 'core/js/adapt';
 import Config from './Config';
 import ScrollControlsView from './ScrollControlsView';
+import Location from 'core/js/location';
 
 export default class Menu extends Backbone.Controller {
 
@@ -28,6 +29,7 @@ export default class Menu extends Backbone.Controller {
   }
 
   onMenuViewPostRender(view) {
+    if (view.model.get('_id') !== Location._currentId) return;
     this.view = view;
     this.view.scrollControlsView = new ScrollControlsView({
       $parent: $('body'),
