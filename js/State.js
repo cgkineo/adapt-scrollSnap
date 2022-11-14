@@ -5,6 +5,15 @@ export const USER_PREF_TRADITIONAL = 2;
 
 export default class State {
 
+  static reset() {
+    this.currentModel = null;
+    this.previousModel = null;
+    this.locationId = null;
+    this.canSnap = false;
+    this.canScroll = false;
+    this.isAnimating = false;
+  }
+
   static get currentModel() {
     return this._currentModel;
   }

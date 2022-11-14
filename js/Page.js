@@ -71,8 +71,7 @@ export default class Page extends Backbone.Controller {
     this._controller.removeEvents();
     Models.blocks.forEach(model => this.stopListening(model));
     Navigation.remove();
-    State.canSnap = false;
-    State.canScroll = false;
+    State.reset();
     Views.page.$el.off('resize', this.onPageResize);
     this._controller.reset();
     State.isScrollSnapViewRendered = false;
