@@ -35,15 +35,12 @@ export default class Block extends Backbone.Controller {
     e.stop();
   }
 
-  /**
-   * @todo Investigate why some branching views are calling this twice
-   */
-  onChildAdded(view) {
+  onChildAdded(view, childView) {
     if (!Views.isScrollSnapActive) return;
     Models.updateLocking();
-    const model = view.model;
+    const model = childView.model;
     if (!Models.isBlock(model)) return;
-    if (Navigation.getModelConfig(model)?._isEnabled) view.$el.addClass('has-navigation');
+    if (Navigation.getModelConfig(model)?._isEnabled) childView.$el.addClass('has-navigation');
     Navigation.update();
     if (!Models.isAutoScrollOnInteractionComplete(model)) return;
     this.stopListening(model, 'change:_isInteractionComplete', this.onBlockInteractionComplete);
