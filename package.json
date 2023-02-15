@@ -1,9 +1,9 @@
 {
   "name": "adapt-scrollSnap",
-  "version": "5.1.3",
+  "version": "5.1.4",
   "framework": ">=5.20.2",
-  "displayName" : "ScrollSnap",
-  "extension" : "scrollSnap",
+  "displayName": "ScrollSnap",
+  "extension": "scrollSnap",
   "description": "An extension which hides the scrollbar and snaps to blocks. Content is set to fill the viewport height.",
   "main": "/js/adapt-scrollSnap.js",
   "keywords": [
