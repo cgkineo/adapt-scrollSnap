@@ -32,7 +32,7 @@ export default class Config extends Backbone.Controller {
   }
 
   static getModelConfig(model) {
-    return model?.get('_scrollSnap');
+    return model?.get?.('_scrollSnap');
   }
 
   static log() {
