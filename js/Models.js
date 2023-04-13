@@ -93,7 +93,7 @@ export default class Models {
   static shouldStopRendering(model) {
     const articlesAndBlocks = this.articlesAndBlocks;
     let stepLockIndex;
-    const isScrollSnapActive = Config.canUseScrollSnap && 
+    const isScrollSnapActive = Config.canUseScrollSnap &&
       Config.isEnabled &&
       Config.getModelConfig(Adapt.parentView)?._isEnabled !== false;
     if (!isScrollSnapActive && State.isTrickleEnabled) {
