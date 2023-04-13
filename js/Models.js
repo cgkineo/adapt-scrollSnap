@@ -95,6 +95,7 @@ export default class Models {
     let stepLockIndex;
     const isScrollSnapActive = Config.canUseScrollSnap &&
       Config.isEnabled &&
+      Adapt.parentView && 
       Config.getModelConfig(Adapt.parentView)?._isEnabled !== false;
     if (!isScrollSnapActive && State.isTrickleEnabled) {
       stepLockIndex = articlesAndBlocks.findIndex(m => m.get('_isLocked'));
