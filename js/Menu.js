@@ -7,7 +7,7 @@ export default class Menu extends Backbone.Controller {
 
   initialize() {
     this.hasAddedEvents = false;
-    this.isGlobal = Config.global._isGlobalMenuScroll ?? true;
+    this.isGlobal = Config?.global?._isGlobalMenuScroll ?? true;
     if (this.isGlobal) this.addEvents();
   }
 
