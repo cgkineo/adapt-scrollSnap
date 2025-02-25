@@ -1,19 +1,17 @@
 html.scrollSnap:not(.has-devtools-map) {
-  @media all and (min-width: @device-width-medium) {
-    &.location-page {
-      overflow-x: hidden !important;
-      overflow-y: hidden !important;
+  &.location-page {
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+  }
+
+  &.no-navigation-offset {
+    #wrapper {
+      padding-top: 0 !important;
     }
 
-    &.no-navigation-offset {
-      #wrapper {
-        padding-top: 0 !important;
-      }
-
-      .nav {
-        background-color: transparent !important;
-        box-shadow: none !important;
-      }
+    .nav {
+      background-color: transparent !important;
+      box-shadow: none !important;
     }
   }
 
