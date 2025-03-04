@@ -1,7 +1,7 @@
   // course.json
   "_scrollSnap": {
     "_isEnabled": true,
-    "_isEnabledOnSizes": "xlarge large",
+    "_isEnabledFromSize": "large",
     "_useNavigationOffset": false,
     "_scrollDuration": {
       "_previous": 400,

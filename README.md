@@ -17,7 +17,7 @@ The following attributes are set within *course.json*:
 
 >**_isEnabled** (boolean): Turns the extension on/off. Acceptable values are `true` and `false`.
 
->**_isEnabledOnSizes** (string): Defines which screen sizes the extension is enabled for. Acceptable values are `"xlarge"`, `"large"`, `"medium"` and `"small"` or combinations thereof as a space-separated list e.g. `"xlarge large medium"`. Defaults to `xlarge large`.
+>**_isEnabledFromSize** (string): Defines the minimum screen size the extension is enabled from. Acceptable values are `"xlarge"`, `"large"`, `"medium"` or `"small"`. Defaults to `large`.
 
 >**_useNavigationOffset** (boolean): Determines whether to use the navigation height to offset the content and scroll positions. Acceptable values are `true` and `false`. Set to `false` to fill the entire viewport height.
 
