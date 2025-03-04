@@ -1,4 +1,5 @@
 import Adapt from 'core/js/adapt';
+import Device from 'core/js/device';
 import State, { USER_PREF_SCROLLSNAP } from './State';
 
 export default class Config extends Backbone.Controller {
@@ -12,7 +13,12 @@ export default class Config extends Backbone.Controller {
   }
 
   static get canUseScrollSnap() {
-    return Adapt.device.screenSize === 'large' && Adapt.device.bowser?.platform?.model !== 'iPhone' && State.userPreference === USER_PREF_SCROLLSNAP;
+    const isEnabledSize = Device.isScreenSizeMin(this.isEnabledFromSize);
+    return isEnabledSize && Device.bowser?.platform?.model !== 'iPhone' && State.userPreference === USER_PREF_SCROLLSNAP;
+  }
+
+  static get isEnabledFromSize() {
+    return this.global?._isEnabledFromSize || 'large';
   }
 
   static get isSwipeEnabled() {

@@ -5,33 +5,31 @@ html.scrollSnap {
     padding-bottom: @navigation-height;
   }
 
-  @media all and (min-width: @device-width-small) {
-    .article__inner,
-    .block__inner {
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-    }
+  .article__inner,
+  .block__inner {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 
+  .block:not(.no-full-vh) {
+    .component__container {
+      .full-vh;
+      align-items: center;
+    }
+  }
+
+  &.no-navigation-offset {
     .block:not(.no-full-vh) {
       .component__container {
-        .full-vh;
-        align-items: center;
+        min-height: var(--adapt-viewport-height) !important;
+        margin: 0 auto;
       }
     }
+  }
 
-    &.no-navigation-offset {
-      .block:not(.no-full-vh) {
-        .component__container {
-          min-height: var(--adapt-viewport-height) !important;
-          margin: 0 auto;
-        }
-      }
-    }
-
-    .has-background-image {
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center center;
-    }
+  .has-background-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
   }
 }

@@ -1,36 +1,36 @@
-.scrollsnap__controls {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 0;
-  width: 100%;
-  z-index: 101;
-  overflow: visible;
-  display: none;
+html.scrollSnap {
+  .scrollsnap__controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 100%;
+    z-index: 101;
+    overflow: visible;
+    display: none;
 
-  .no-touch .is-full-window& {
-    display: block;
+    .no-touch .is-full-window& {
+      display: block;
+    }
+
+    &-inner {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    &-btn {
+      position: absolute;
+      left: 50%;
+    }
+
+    &-btn-up {
+      transform: translateX(-50%);
+    }
+
+    &-btn-down {
+      transform: translate(-50%, -100%);
+      top: 100vh;
+    }
   }
-
-  &-inner {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  &-btn {
-    position: absolute;
-    left: 50%;
-  }
-
-  &-btn-up {
-    transform: translateX(-50%);
-  }
-
-  &-btn-down {
-    transform: translate(-50%, -100%);
-    top: 100vh;
-  }
-
-
 }

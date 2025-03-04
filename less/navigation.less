@@ -1,45 +1,43 @@
-.scrollsnap__nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  z-index: 81;
-  pointer-events: none;
+html.scrollSnap {
+  .scrollsnap__nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 81;
+    pointer-events: none;
 
-  @media (max-width: @device-width-medium) {
-    .u-display-none;
-  }
+    &-inner {
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      display: flex;
+      justify-content: center;
 
-  &-inner {
-    opacity: 1;
-    transition: opacity 0.4s ease;
-    display: flex;
-    justify-content: center;
-
-    &.is-paused {
-      opacity: 0;
+      &.is-paused {
+        opacity: 0;
+      }
     }
-  }
 
-  &-btn {
-    pointer-events: auto;
+    &-btn {
+      pointer-events: auto;
 
-    .is-paused & {
+      .is-paused & {
+        pointer-events: none;
+      }
+    }
+
+    // replace btn icon for padlock when locked
+    &-btn.is-locked .icon {
+      .icon-padlock-locked;
+    }
+
+    &.is-hidden,
+    .is-hidden,
+    .hide-if-locked.is-locked {
+      .u-visibility-hidden;
+      //content-visibility: hidden;
       pointer-events: none;
     }
-  }
-
-  // replace btn icon for padlock when locked
-  &-btn.is-locked .icon {
-    .icon-padlock-locked;
-  }
-  
-  &.is-hidden,
-  .is-hidden,
-  .hide-if-locked.is-locked {
-    .u-visibility-hidden;
-    //content-visibility: hidden;
-    pointer-events: none;
   }
 }
