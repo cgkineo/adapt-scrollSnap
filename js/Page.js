@@ -1,6 +1,7 @@
 import Adapt from 'core/js/adapt';
 import Data from 'core/js/data';
 import Location from 'core/js/location';
+import a11y from 'core/js/a11y';
 import Classes from './Classes';
 import Models from './Models';
 import State from './State';
@@ -82,6 +83,10 @@ export default class Page extends Backbone.Controller {
     const options = { pluginName: 'scrollSnap' };
     // prevent scrolling without navigation offset and control via plugin
     Adapt.set('_canScroll', false, options);
+    if (a11y.isPopupOpen) {
+      this.listenToOnce(Adapt, 'popup:closed', this.onPageScrollTo.bind(this, selector, settings));
+      return;
+    }
     _.defer(() => {
       Adapt.set('_canScroll', true, options);
       let id = selector.replace('.', '');
@@ -92,7 +97,6 @@ export default class Page extends Backbone.Controller {
         id = model.get('_id');
       }
       if (!Models.isBlock(model)) return;
-      State.currentModel = model;
       Snap.toId(id, settings?.duration);
     });
   }
