@@ -86,7 +86,7 @@ export default class Models {
     const stepLockedBlockIndex = this.stepLockedBlockIndex;
     this.blocks.forEach((model, index) => {
       const isLocked = stepLockedBlockIndex >= 0 && (index > stepLockedBlockIndex);
-      model.setOnChildren('_isLocked', isLocked);
+      model.setOnChildren('_isLocked', isLocked, { pluginName: 'scrollSnap' });
     });
   }
 
