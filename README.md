@@ -1,4 +1,5 @@
 # adapt-scrollSnap
+
 An extension which hides the scrollbar and snaps the scroll position to blocks for large devices. Navigation based on swipe gestures, specific keyboard navigation, the mouse wheel, and an optional scroll button.
 
 Content is set to fill the viewport height.
@@ -37,4 +38,11 @@ The following attributes are set within *course.json*:
 
 - Currently not setup to work with [**adapt-contrib-trickle**](https://github.com/adaptlearning/adapt-contrib-trickle). Instead, blocks are step-locked until completed. Mark blocks as _isOptional to disable step-locking.
 
-- Currently not setup to work with [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-). Do not use with other plugins that permit navigation (e.g. adapt-devtools map), including use of `Adapt.navigateToElement`.
+- Currently not setup to work with [**adapt-contrib-pageLevelProgress**](https://github.com/adaptlearning/adapt-contrib-pageLevelProgress). Do not use with other plugins that permit navigation (e.g. adapt-devtools map), including use of `Adapt.navigateToElement`.
+
+----------------------------
+
+**Author / maintainer:** CGKineo<br>
+**Accessibility support:** WAI AA<br>
+**RTL support:** Yes<br>
+**Cross-platform coverage:** Chrome, Chrome for Android, Firefox (ESR + latest version), Edge, Safari for macOS/iOS/iPadOS, Opera<br>
