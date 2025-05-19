@@ -1,6 +1,6 @@
 {
   "name": "adapt-scrollSnap",
-  "version": "5.3.2",
+  "version": "5.4.0",
   "framework": ">=5.46.4",
   "displayName": "ScrollSnap",
   "extension": "scrollSnap",
